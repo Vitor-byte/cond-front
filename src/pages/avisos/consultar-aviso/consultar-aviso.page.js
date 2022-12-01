@@ -3,9 +3,8 @@ import { Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import avisosService from '../../../services/avisos.service';
-import './avisos-detail.page.css';
 
-class AvisosDetailPage extends React.Component {
+class ConsultarAviso extends React.Component {
 
     constructor(props) {
         super(props)
@@ -107,4 +106,4 @@ class AvisosDetailPage extends React.Component {
 
 }
 
-export default AvisosDetailPage
+export default ConsultarAviso

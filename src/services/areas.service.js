@@ -16,11 +16,26 @@ const areasService = {
         const enpoint = apiUrl + "/area/" + areaId
         return axios.get(enpoint)
     },
-    async getHorarios(data){
-        const enpoint = apiUrl + "/horarios"
-        return axios.get(enpoint, data)
+    async consultarHorarios(data){
+        const enpoint = apiUrl + "/horarios/"+data
+        return axios.get(enpoint)
     },
-
+    async reservarArea(data){
+        const enpoint = apiUrl + "/reservar"
+        return axios.post(enpoint, data)
+    },
+    async consutarReservas(usuarioId){
+        const enpoint = apiUrl + "/reservas/"+usuarioId
+        return axios.get(enpoint)
+    },
+    async consutarReserva(reservaId){
+        const enpoint = apiUrl + "/reserva/"+reservaId
+        return axios.get(enpoint)
+    },
+    async cancelarReserva(reservaId){
+        const enpoint = apiUrl + "/cancelar/reserva/"+reservaId
+        return axios.patch(enpoint)
+    },
     // Função para criar um novo post
     async create(data){
         const enpoint = apiUrl + "/area"

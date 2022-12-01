@@ -21,3 +21,14 @@
   font-size: 12px;
   margin: 0;
 }
+.button{
+
+    cursor: pointer;
+    padding: 10px 20px 10px 20px;
+    background-color: #003d36;
+    gap: 8;
+    color: aliceblue;
+    border-radius: 6px;
+    border-color: #003d36;
+  
+}

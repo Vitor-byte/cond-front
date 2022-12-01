@@ -3,10 +3,6 @@ import { Link, Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import avisosService from '../../../services/avisos.service';
-import './avisos-list.page.css';
-
-
-
 
 class AvisosListPage extends React.Component {
 
@@ -50,8 +46,8 @@ class AvisosListPage extends React.Component {
             <div className="container">
 
                 <PageTop title={"Avisos"} desc={"Listagem dos avisos"}>
-                    <button className="btn btn-primary" onClick={() => this.props.history.push('/avisos-add')}>
-                        Adicionar
+                    <button className="btn btn-primary" onClick={() => this.props.history.push('/incluir-aviso')}>
+                        Novo aviso
                     </button>
                 </PageTop>
                 <table className='styled-table'>
@@ -72,7 +68,7 @@ class AvisosListPage extends React.Component {
                 
                 <table  className="styled-table" >
                     <tr className='styled-table thead'>
-                    <Link to={"/avisos-detail/" + avisos.id_aviso} key={avisos.id_aviso}>
+                    <Link to={"/alterar-aviso/" + avisos.id_aviso} key={avisos.id_aviso}>
                     <td>{avisos.id_aviso}</td>
                     </Link>
                            

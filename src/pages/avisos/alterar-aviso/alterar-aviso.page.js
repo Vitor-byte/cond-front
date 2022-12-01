@@ -3,9 +3,8 @@ import { Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import avisosService from '../../../services/avisos.service';
-import './avisos-edit.page.css'
 
-class AvisoEditPage extends React.Component {
+class AlterarAviso extends React.Component {
 
     constructor(props){
         super(props)
@@ -128,4 +127,4 @@ class AvisoEditPage extends React.Component {
 
 }
 
-export default AvisoEditPage;
+export default AlterarAviso;

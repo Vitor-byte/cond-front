@@ -21,11 +21,10 @@ class Login extends React.Component {
       password: this.state.password,
     };
 
-    
-    
 
       this.props.onLogin();
-      this.props.history.replace("/");
+      this.props.history.replace("/condominos-list");
+   
   }
 
   render() {

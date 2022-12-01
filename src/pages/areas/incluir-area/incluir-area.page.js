@@ -3,9 +3,8 @@ import { Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import areasService from '../../../services/areas.service';
-import './areas-edit.page.css'
 
-class AreasEditPage extends React.Component {
+class IncluirArea extends React.Component {
 
     constructor(props){
         super(props)
@@ -21,19 +20,6 @@ class AreasEditPage extends React.Component {
         }
 
     }
-
-    // Função executada assim que o componente carrega
-    componentDidMount(){
-    
-        // Verificando se id foi passado nos parâmetros da url
-        if(this.props?.match?.params?.id_area_comum){
-            console.log();
-            let areaId = this.props.match.params.id_area_comum
-            console.log(areaId);
-            this.getArea(areaId)
-        }
-    }
-
     // Função que recupera os dados do post caso seja uma edição
     async getArea(areaId){
         try {
@@ -42,13 +28,13 @@ class AreasEditPage extends React.Component {
             this.setState(area)
         } catch (error) {
             console.log(error);
-            alert("Não foi possível carregar post.")
+         
         }
     }
 
     // Função responsável por salvar o post
     async enviarArea(){
-        console.log("entrou")
+    
         // Reunindo dados
         let data = {
             nome : this.state.nome,
@@ -57,12 +43,26 @@ class AreasEditPage extends React.Component {
             situacao: this.state.situacao
         }
 
-        // Realizando verificações
-        //if(!data.title || data.title === ''){
-          //  alert("Título é obrigatório!")
-           // return;
-      //  }
+       
+        if(!data.nome || data.nome === ''){
+           this.nome.focus() 
+           return;
+        }
      
+        if(!data.descricao || data.descricao === ''){
+            this.descricao.focus() 
+            return;
+         }
+     
+         if(!data.preco || data.preco === ''){
+            this.preco.focus() 
+            return;
+         }
+         if(!data.situacao || data.situacao === ''){
+            this.situacao.focus() 
+            return;
+         }
+      
         try {
             // Caso seja uma edição, chamar o "edit" do serviço
             if(this.state.id_area_comum){
@@ -112,6 +112,7 @@ class AreasEditPage extends React.Component {
                             className="form-control"
                             id="title"
                             value={this.state.nome}
+                            ref={(input) => { this.nome = input }}
                             onChange={e => this.setState({ nome: e.target.value })} />
                         {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
@@ -122,6 +123,7 @@ class AreasEditPage extends React.Component {
                             className="form-control"
                             id="title"
                             value={this.state.descricao}
+                            ref={(input) => { this.descricao = input }}
                             onChange={e => this.setState({ descricao: e.target.value })} />
                         {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                         
@@ -133,21 +135,26 @@ class AreasEditPage extends React.Component {
                             className="form-control"
                             id="title"
                             value={this.state.preco}
+                            ref={(input) => { this.preco = input }}
                             onChange={e => this.setState({ preco: e.target.value })} />
                         {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                         
                     </div>
                     <div className="form-group">
-                        <label htmlFor="title">Situação</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="title"
-                            value={this.state.situacao}
-                            onChange={e => this.setState({ situacao: e.target.value })} />
-                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
-                        
+                    <label htmlFor="inadimplente">Situação
+                    </label>
+                    <select
+                    type="text"
+                    className="form-control"
+                    id="situacao"
+                    value={this.state.situacao}
+                    onChange={e => this.setState({ situacao: e.target.value })}
+                    >
+                    <option value="Aberta">Aberta</option>
+                    <option value="Fechada">Fechada</option>
+                    </select>
                     </div>
+                
                 </form>
             </div>
         )
@@ -155,4 +162,4 @@ class AreasEditPage extends React.Component {
 
 }
 
-export default AreasEditPage;
+export default IncluirArea;

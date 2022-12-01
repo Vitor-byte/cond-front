@@ -5,7 +5,7 @@ import authService from '../../../services/auth.service';
 import areasService from '../../../services/areas.service';
 import './areas-list.page.css';
 
-class AreasListPage extends React.Component {
+class CondAreasList extends React.Component {
 
     constructor(props) {
         super(props)
@@ -47,9 +47,7 @@ class AreasListPage extends React.Component {
             <div className="container">
 
                 <PageTop title={"Áreas"} desc={"Listagem das áreas"}>
-                    <button className="btn btn-primary" onClick={() => this.props.history.push('/incluir-area')}>
-                        Nova área
-                    </button>
+                   
                 </PageTop>
 
                 <table className='styled-table'>
@@ -69,7 +67,7 @@ class AreasListPage extends React.Component {
                 
                   <table  className="styled-table" >
                       <tr className='styled-table thead'>
-                      <Link to={"/alterar-area/" + areas.id_area_comum} key={areas.id_area_comum}>
+                      <Link to={"/consultar-area/" + areas.id_area_comum} key={areas.id_area_comum}>
                       <td>{areas.id_area_comum}</td>
                       </Link>
                              
@@ -88,4 +86,4 @@ class AreasListPage extends React.Component {
 
 }
 
-export default AreasListPage;
+export default CondAreasList;

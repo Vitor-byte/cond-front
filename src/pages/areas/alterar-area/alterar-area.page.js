@@ -3,9 +3,8 @@ import { Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import areasService from '../../../services/areas.service';
-import './post-edit.page.css'
 
-class ReservasEditPage extends React.Component {
+class AlterarArea extends React.Component {
 
     constructor(props){
         super(props)
@@ -35,7 +34,7 @@ class ReservasEditPage extends React.Component {
     }
 
     // Função que recupera os dados do post caso seja uma edição
-    async getAr(areaId){
+    async getArea(areaId){
         try {
             let res = await areasService.getOne(areaId)
             let area = res.data[0]
@@ -47,7 +46,7 @@ class ReservasEditPage extends React.Component {
     }
 
     // Função responsável por salvar o post
-    async sendPost(){
+    async enviarArea(){
         console.log("entrou")
         // Reunindo dados
         let data = {
@@ -57,22 +56,35 @@ class ReservasEditPage extends React.Component {
             situacao: this.state.situacao
         }
 
-        // Realizando verificações
-        //if(!data.title || data.title === ''){
-          //  alert("Título é obrigatório!")
-           // return;
-      //  }
-     
+        if(!data.nome || data.nome === ''){
+            this.nome.focus() 
+            return;
+         }
+      
+         if(!data.descricao || data.descricao === ''){
+             this.descricao.focus() 
+             return;
+          }
+      
+          if(!data.preco || data.preco === ''){
+             this.preco.focus() 
+             return;
+          }
+          if(!data.situacao || data.situacao === ''){
+             this.situacao.focus() 
+             return;
+          }
+       
         try {
             // Caso seja uma edição, chamar o "edit" do serviço
             if(this.state.id_area_comum){
                 await areasService.edit(data, this.state.id_area_comum)
-                alert("Condômino editado com sucesso!")
+                alert("Área editado com sucesso!")
             }
             // Caso seja uma adição, chamar o "create" do serviço
             else{
                 await areasService.create(data)
-                alert("Condômino criado com sucesso!")
+                alert("Área criado com sucesso!")
             }
             this.props.history.push('/areas-list')
         } catch (error) {
@@ -99,7 +111,7 @@ class ReservasEditPage extends React.Component {
                     <button className="btn btn-light" onClick={() => this.props.history.replace('/areas-list')}>
                         Cancelar
                     </button>
-                    <button className="btn btn-primary" onClick={() => this.sendPost()}>
+                    <button className="btn btn-primary" onClick={() => this.enviarArea()}>
                         Salvar
                     </button>
                 </PageTop>
@@ -112,6 +124,7 @@ class ReservasEditPage extends React.Component {
                             className="form-control"
                             id="title"
                             value={this.state.nome}
+                            ref={(input) => { this.nome = input }}
                             onChange={e => this.setState({ nome: e.target.value })} />
                         {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
@@ -122,6 +135,7 @@ class ReservasEditPage extends React.Component {
                             className="form-control"
                             id="title"
                             value={this.state.descricao}
+                            ref={(input) => { this.descricao = input }}
                             onChange={e => this.setState({ descricao: e.target.value })} />
                         {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                         
@@ -133,20 +147,22 @@ class ReservasEditPage extends React.Component {
                             className="form-control"
                             id="title"
                             value={this.state.preco}
+                            ref={(input) => { this.preco = input }}
                             onChange={e => this.setState({ preco: e.target.value })} />
                         {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                         
                     </div>
                     <div className="form-group">
-                        <label htmlFor="title">Situação</label>
-                        <input
+                    <label htmlFor="inadimplente">Situação</label>
+                        <select
                             type="text"
                             className="form-control"
-                            id="title"
+                            id="situacao"
                             value={this.state.situacao}
-                            onChange={e => this.setState({ situacao: e.target.value })} />
-                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
-                        
+                            onChange={e => this.setState({ situacao: e.target.value })}>
+                            <option value="Aberta">Aberta</option>
+                            <option value="Fechada">Fechada</option>
+                        </select>
                     </div>
                 </form>
             </div>
@@ -155,4 +171,4 @@ class ReservasEditPage extends React.Component {
 
 }
 
-export default ReservasEditPage;
+export default AlterarArea;

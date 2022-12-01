@@ -1,11 +1,11 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import PageTop from '../../components/page-top/page-top.component';
-import authService from '../../services/auth.service';
-import condominosService from '../../services/condominos.service';
-import './condominos-edit.page.css'
+import PageTop from '../../../components/page-top/page-top.component';
+//import authService from '../../services/auth.service';
+import condominosService from '../../../services/condominos.service';
 
-class CondominosEditPage extends React.Component {
+
+class IncluirCondomino extends React.Component {
 
     constructor(props){
         super(props)
@@ -20,37 +20,16 @@ class CondominosEditPage extends React.Component {
             inadimplente:'',
             bloco : '',
             unidade: '',
-            redirectTo: null
+            redirectTo: null,
+            condomino:'',
         }
 
     }
 
-    // Função executada assim que o componente carrega
-    componentDidMount(){
-      
-            if(this.props?.match?.params?.id_usuario){
-                let condominoId = this.props.match.params.id_usuario
-                console.log(condominoId)
-                this.getCondominos(condominoId)
-            }
-      
-    }
-
-    // Função que recupera os dados do post caso seja uma edição
-    async getCondominos(condominoId){
-        try {
-            let res = await condominosService.getOne(condominoId)
-            let condomino = res.data[0]
-            console.log(condomino)
-            this.setState(condomino)
-        } catch (error) {
-            console.log(error);
-            alert("Não foi possível carregar post.")
-        }
-    }
+    
 
     // Função responsável por salvar o post
-    async enviarCondomino(){
+    async incluirCondomino(){
         
         // Reunindo dados
         let data = {
@@ -64,30 +43,35 @@ class CondominosEditPage extends React.Component {
             bloco : this.state.bloco,
         }
 
-        // Realizando verificações
-        //if(!data.title || data.title === ''){
-          //  alert("Título é obrigatório!")
-           // return;
-      //  }
-     
-        try {
-            // Caso seja uma edição, chamar o "edit" do serviço
-            if(this.state.id_usuario){
-                await condominosService.edit(data, this.state.id_usuario)
-                alert("Condômino editado com sucesso!")
-            }
-            // Caso seja uma adição, chamar o "create" do serviço
-            else{
-                await condominosService.create(data)
-                alert("Condômino criado com sucesso!")
-                this.props.history.push('/condominos-list')
-
-            }
-            this.props.history.push('/condominos-list')
-        } catch (error) {
-            console.log(error)
-            
+        if(!data.rg || data.rg === ''){
+            this.rg.focus()        
+            return
         }
+        if(!data.nome || data.nome === ''){
+            this.nome.focus();        
+            return
+        }
+        if(!data.email || data.email === ''){
+            this.email.focus();        
+            return
+        }
+        if(!data.senha || data.senha === ''){
+            this.senha.focus();        
+            return
+        }
+        if(!data.bloco || data.bloco === ''){
+            this.bloco.focus();        
+            return
+        }
+        if(!data.unidade || data.unidade === ''){
+            this.unidade.focus();        
+            return
+        }
+        
+        let res = await condominosService.create(data)
+        this.setState({ condomino: res.data[0]})
+        this.props.history.push('/alterar-condomino/'+this.state.condomino.id_usuario)
+      
     }
 
     render() {
@@ -97,20 +81,10 @@ class CondominosEditPage extends React.Component {
                 <Redirect to={this.state.redirectTo}/>
             )
         }
-
-        let title = this.state.id_usuario? 'Editar Condomino' : 'Novo Condômino';
-        let desc = this.state.id_usuario ? 'Editar informações de um post' : 'Formulário de criação de Condômino';
-
         return (
             <div className="container">
 
-                <PageTop title={title} desc={desc}>
-                    <button className="btn btn-light" onClick={() => this.props.history.replace('/condominos-list')}>
-                        Cancelar
-                    </button>
-                    <button className="btn btn-primary" onClick={() => this.enviarCondomino()}>
-                        Salvar
-                    </button>
+                <PageTop title="Incluir condômino" >
                 </PageTop>
 
                 <form onSubmit={e => e.preventDefault()}>
@@ -121,6 +95,7 @@ class CondominosEditPage extends React.Component {
                             className="form-control"
                             id="rg"
                             value={this.state.rg}
+                            ref={(input) => { this.rg = input }}
                             onChange={e => this.setState({ rg: e.target.value })} />
                         {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
@@ -131,6 +106,7 @@ class CondominosEditPage extends React.Component {
                             className="form-control"
                             id="nome"
                             value={this.state.nome}
+                            ref={(input) => { this.nome = input }}
                             onChange={e => this.setState({ nome: e.target.value })} />
                         {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
@@ -141,16 +117,18 @@ class CondominosEditPage extends React.Component {
                             className="form-control"
                             id="email"
                             value={this.state.email}
+                            ref={(input) => { this.email = input }}
                             onChange={e => this.setState({ email: e.target.value })} />
                         {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
                     <div className="form-group">
                         <label htmlFor="senha">Senha</label>
                         <input
-                            type="text"
+                            type="password"
                             className="form-control"
                             id="senha"
                             value={this.state.senha}
+                            ref={(input) => { this.senha = input }}
                             onChange={e => this.setState({ senha: e.target.value })} />
                         {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
@@ -171,14 +149,18 @@ class CondominosEditPage extends React.Component {
 
 
                     <div className="form-group">
-                        <label htmlFor="situacao">Situação</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="situacao"
-                            value={this.state.situacao}
-                            onChange={e => this.setState({ situacao: e.target.value })} />
-                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
+                    <label htmlFor="inadimplente">Situação
+                    </label>
+                    <select
+                    type="text"
+                    className="form-control"
+                    id="situacao"
+                    value={this.state.situacao}
+                    onChange={e => this.setState({ situacao: e.target.value })}
+                    >
+                    <option value="Ativo">Ativo</option>
+                    <option value="Inativo">Inativo</option>
+                    </select>
                     </div>
                     <div className="form-group">
                         <label htmlFor="bloco">Bloco</label>
@@ -187,6 +169,7 @@ class CondominosEditPage extends React.Component {
                             className="form-control"
                             id="bloco"
                             value={this.state.bloco}
+                            ref={(input) => { this.bloco = input }}
                             onChange={e => this.setState({ bloco: e.target.value })} />
                         {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
@@ -197,14 +180,21 @@ class CondominosEditPage extends React.Component {
                             className="form-control"
                             id="unidade"
                             value={this.state.unidade}
+                            ref={(input) => { this.unidade = input }}
                             onChange={e => this.setState({ unidade: e.target.value })} />
                         {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
                 </form>
+                <button className="btn btn-light" onClick={() => this.props.history.replace('/condominos-list')}>
+                        Cancelar
+                    </button>
+                    <button className="btn btn-primary" onClick={() => this.incluirCondomino()}>
+                        Salvar
+                    </button>
             </div>
         )
     }
 
 }
 
-export default CondominosEditPage;
+export default IncluirCondomino;

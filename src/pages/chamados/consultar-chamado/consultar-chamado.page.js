@@ -3,17 +3,13 @@ import { Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import chamadosService from '../../../services/chamados.service';
-import './chamados-detail.page.css';
 
-class ChamadosDetailPage extends React.Component {
+class ConsultarChamado extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            // Atributo para armazenar os dados 
-            usuario: null,
-            situacao:null,
-            chamado: null,
+            chamado: '',
             redirectTo: null
         }
     }
@@ -21,32 +17,19 @@ class ChamadosDetailPage extends React.Component {
     // Função que é executada assim que o componente carrega
     componentDidMount() {
         
-            // Recuperando os id na url
             const chamadoId = this.props.match.params.id_chamado
-            // Chamando a função que carrega os dados 
             console.log(chamadoId);
-            this.getChamado(chamadoId)
+            this.consultarChamado(chamadoId)
     }
 
-    // Função que carrega os dados do post e salva no state
-    async getChamado(chamadoId) {
+    async consultarChamado(chamadoId) {
         
-            let res = await chamadosService.getOne(chamadoId)
+            let res = await chamadosService.consultarChamadoResposta(chamadoId)
             console.log(res);
             this.setState({ chamado: res.data[0] })
             console.log(this.chamado);
         
     }
-
-    async atenderChamado(chamadoId) {
-        let data = {
-            situacao : "Em andamento"
-        }
-    
-            await chamadosService.edit(data, chamadoId)
-            this.props.history.push('/chamados-edit/' + this.state.chamado.id_chamado)
-    }
-
     render() {
 
         if(this.state.redirectTo){
@@ -83,20 +66,13 @@ class ChamadosDetailPage extends React.Component {
                             <h4>Situação</h4>
                             <p>{this.state.chamado?.situacao}</p>
                         </div>
+                        
                         <div className="post-info">
-                            <h4>Resolução</h4>
-                            <p>{this.state.chamado?.resolucao}</p>
+                            <h4>Resposta</h4>
+                            <p>{this.state.chamado?.resposta}</p>
                         </div>
                     
-                        <div className="btn-group" role="group" aria-label="Basic example">
-                            <button
-                                type="button"
-                                className="btn btn-sm btn-outline-danger"
-                                onClick={() => this.atenderChamado(this.state.chamado.id_chamado)}>
-                                Atender
-                            </button>
-                        
-                        </div>
+                       
                     </div>
 
                 </div>
@@ -106,4 +82,4 @@ class ChamadosDetailPage extends React.Component {
 
 }
 
-export default ChamadosDetailPage
+export default ConsultarChamado

@@ -3,20 +3,18 @@ import { Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import chamadosService from '../../../services/chamados.service';
-import './chamados-edit.page.css'
 
-class ChamadosEditPage extends React.Component {
+class incluirChamado extends React.Component {
 
     constructor(props){
         super(props)
 
         // State iniciado com atributos do chamado vazios
         this.state = {
-            chamado: null,
-            id_chamado: null,
+            chamado: '',
             titulo : '',
             descricao : '',
-            resolucao:'',
+            tipo:'',
             redirectTo: null
         }
 
@@ -48,49 +46,38 @@ class ChamadosEditPage extends React.Component {
         }
     }
    
-    async finalizarChamado(chamadoId){
+    async incluirChamado(){
+        
         let data = {
-            id_chamado :chamadoId,
-            resolucao: this.state.resolucao,
+            titulo : this.state.titulo,
+            descricao: this.state.descricao,
+            tipo: this.state.tipo
         }
 
-        try {
-            console.log("entrou");
+        if(!data.titulo || data.titulo === ''){
+            this.titulo.focus()        
+            return
+        }
 
-            let res = await chamadosService.finalizar( data, chamadoId)
+        if(!data.descricao || data.descricao === ''){
+            this.descricao.focus()        
+            return
+        }
+        if(!data.tipo || data.tipo === ''){
+            this.tipo.focus()        
+            return
+        }
+        try {
+            let res = await chamadosService.incluirChamado(data)
             let chamado = res.data[0]
             this.setState(chamado)
             console.log(chamado)
-
-            alert("Chamado finalizado.")
-            this.props.history.replace('/chamados-list')
-        } catch (error) {
-            console.log(error);
-            alert("Não foi possível finalizar o chamado."+error)
-        }
-    }
-    async cancelarChamado(chamadoId){
-        let data = {
-            id_chamado : chamadoId,
-            resolucao: this.state.resolucao,
-        }
-
-        try {
-            console.log("entrou");
-
-            let res = await chamadosService.cancelar( data, chamadoId)
-            let chamado = res.data[0]
-            this.setState(chamado)
-            console.log(chamado)
-
-            alert("Chamado cancelado.")
             this.props.history.replace('/chamados-list')
         } catch (error) {
             console.log(error);
             alert("Não foi possível cancelar o chamado."+error)
         }
     }
-
     
 
 
@@ -105,7 +92,7 @@ class ChamadosEditPage extends React.Component {
         return (
             <div className="container">
 
-                <PageTop title={'Atender Chamado'}>
+                <PageTop title={'Incluir chamado'}>
                     <button className="btn btn-light"  onClick={() => this.props.history.goBack()}>
                         Voltar
                     </button>
@@ -113,40 +100,45 @@ class ChamadosEditPage extends React.Component {
                 </PageTop>
 
                 <form onSubmit={e => e.preventDefault()}>
-                <div className="post-info">
-                            <h4>ID</h4>
-                            <p>{this.state.chamado?.id_chamado}</p>
-                        </div>
-                        <div className="post-info">
-                            <h4>Titulo</h4>
-                            <p>{this.state.chamado?.titulo}</p>
-                        </div>
-                        <div className="post-info">
-                            <h4>Descrição</h4>
-                            <p>{this.state.chamado?.descricao}</p>
-                        </div>
-                        <div className="post-info">
-                            <h4>Situação</h4>
-                            <p>{this.state.chamado?.situacao}</p>
-                        </div>
-                  
-                    <div className="form-group">
-                        <label htmlFor="title">Resolução</label>
+                <div className="form-group">
+                        <label htmlFor="title">Título</label>
                         <input
                             type="text"
                             className="form-control"
                             id="title"
-                            value={this.state.resolucao}
-                            onChange={e => this.setState({ resolucao: e.target.value })} />
+                            value={this.state.titulo}
+                            ref={(input) => { this.titulo = input }}
+                            onChange={e => this.setState({ titulo: e.target.value })} />
                         {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
-                    
                     </div>
-                    <button className="btn btn-primary" onClick={() => this.cancelarChamado( this.state.chamado.id_chamado)}>
-                        Cancelar
-                    </button>
-                
-                    <button className="btn btn-primary" onClick={() => this.finalizarChamado( this.state.chamado.id_chamado)}>
-                        Finalizar
+                    <div className="form-group">
+                        <label htmlFor="title">Descrição</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="title"
+                            value={this.state.descricao}
+                            ref={(input) => { this.descricao = input }}
+                            onChange={e => this.setState({ descricao: e.target.value })} />
+                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
+                    </div>
+
+                    <div className="form-group">
+                    <label htmlFor="inadimplente">Tipo</label>
+                        <select
+                            type="text"
+                            className="form-control"
+                            id="situacao"
+                            value={this.state.tipo}
+                            onChange={e => this.setState({ tipo: e.target.value })}>
+                        <option value="Reclamação">Reclamação</option>
+                        <option value="Reclamação">Reclamação</option>
+                        <option value="Reclamação">Reclamação</option>
+                        <option value="Reclamação">Reclamação</option>
+                        </select>
+                    </div>
+                    <button className="btn btn-primary" onClick={() => this.incluirChamado( this.state.chamado)}>
+                        Incluir
                     </button>
                 </form>
             </div>
@@ -155,4 +147,4 @@ class ChamadosEditPage extends React.Component {
 
 }
 
-export default ChamadosEditPage;
+export default incluirChamado;
