@@ -4,7 +4,7 @@ import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import avisosService from '../../../services/avisos.service';
 
-class AvisosListPage extends React.Component {
+class CondAvisosListPage extends React.Component {
 
     constructor(props) {
         super(props)
@@ -68,7 +68,7 @@ class AvisosListPage extends React.Component {
                 
                 <table  className="styled-table" >
                     <tr className='styled-table thead'>
-                    <Link to={"/alterar-aviso/" + avisos.id_aviso} key={avisos.id_aviso}>
+                    <Link to={"/consultar-aviso/" + avisos.id_aviso} key={avisos.id_aviso}>
                     <td>{avisos.id_aviso}</td>
                     </Link>
                            
@@ -86,4 +86,4 @@ class AvisosListPage extends React.Component {
 
 }
 
-export default AvisosListPage;
+export default CondAvisosListPage;

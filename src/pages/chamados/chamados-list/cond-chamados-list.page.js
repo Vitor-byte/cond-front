@@ -22,15 +22,15 @@ class CondChamadosListPage extends React.Component {
     // Função que é executada assim que o componente carrega.
     componentDidMount() {
     
-            this.chamadoAbertos()
+            this.consultarChamados(4)
 
     }
 
-    async chamadoAbertos() {
+    async consultarChamados(id_usuario) {
         this.setState({aberto: true, emAndamento:false, finalizado:false})
         try {
             
-            let res = await chamadosService.consultarAbertos()
+            let res = await chamadosService.consultarChamadoUsuario(id_usuario)
             console.log(res);
             this.setState({ chamados: res.data})
         } catch (error) {
@@ -50,7 +50,7 @@ class CondChamadosListPage extends React.Component {
         return (
             <div className="container">
 
-                <PageTop title={"Chamados"} desc={"Listagem dos chamados"}>
+                <PageTop title={"Meus chamados"}>
                     <button className="btn btn-primary" onClick={() => this.props.history.push('/incluir-chamado')}>
                         Novo chamado
                     </button>
@@ -70,7 +70,7 @@ class CondChamadosListPage extends React.Component {
 
                 {/* Percorrendo o array de posts do state e renderizando cada um
                 dentro de um link que leva para a página de detalhes do post específico */}
-                {this.state.chamados.map(chamados => (
+                {this.state.chamados && this.state.chamados.map(chamados => (
                 
               
                

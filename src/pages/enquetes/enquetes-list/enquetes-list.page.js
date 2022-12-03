@@ -2,15 +2,15 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
-import avisosService from '../../../services/avisos.service';
+import enquetesService from '../../../services/enquetes.service';
 
-class AvisosListPage extends React.Component {
+class EnquetesListPage extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
             // Atributo para armazenar o array de posts vindos da API.
-            avisos: [],
+            enquetes: [],
             redirectTo: null
         }
     }
@@ -18,16 +18,16 @@ class AvisosListPage extends React.Component {
     // Função que é executada assim que o componente carrega.
     componentDidMount() {
     
-            this.getAvisos()
+            this.consultarEnquetes()
 
     }
 
     // Função responsável por chamar o serviço e carregar os posts.
-    async getAvisos() {
+    async consultarEnquetes() {
         try {
-            let res = await avisosService.list()
+            let res = await enquetesService.list()
             console.log(res);
-            this.setState({ avisos: res.data})
+            this.setState({ enquetes: res.data})
         } catch (error) {
             console.log(error);
             alert("Não foi possível listar os condômino.")
@@ -45,9 +45,9 @@ class AvisosListPage extends React.Component {
         return (
             <div className="container">
 
-                <PageTop title={"Avisos"} desc={"Listagem dos avisos"}>
-                    <button className="btn btn-primary" onClick={() => this.props.history.push('/incluir-aviso')}>
-                        Novo aviso
+                <PageTop title={"Enquetes"} desc={""}>
+                    <button className="btn btn-primary" onClick={() => this.props.history.push('/incluir-enquete')}>
+                        Nova enquete
                     </button>
                 </PageTop>
                 <table className='styled-table'>
@@ -55,25 +55,26 @@ class AvisosListPage extends React.Component {
                         <tr>
                             <th>Id</th>
                             <th>Título</th>
+                            <th>Situação</th>
                             <th>Data emissão</th>
                         </tr>
                     </thead>
                 </table>
                 {/* Percorrendo o array de posts do state e renderizando cada um
                 dentro de um link que leva para a página de detalhes do post específico */}
-                {this.state.avisos.map(avisos => (
+                {this.state.enquetes.map(enquetes => (
                     
 
                 <div >
                 
                 <table  className="styled-table" >
                     <tr className='styled-table thead'>
-                    <Link to={"/alterar-aviso/" + avisos.id_aviso} key={avisos.id_aviso}>
-                    <td>{avisos.id_aviso}</td>
+                    <Link to={"/alterar-enquete/" + enquetes.id_enquete} key={enquetes.id_enquete}>
+                    <td>{enquetes.id_enquete}</td>
                     </Link>
-                           
-                    <td>{avisos.titulo}</td>
-                    <td>{avisos.data_emissao}</td>
+                    <td>{enquetes.titulo}</td>
+                    <td>{enquetes.situacao}</td>
+                    <td>{enquetes.data_emissao}</td>
                     </tr>
                 </table>
                            
@@ -86,4 +87,4 @@ class AvisosListPage extends React.Component {
 
 }
 
-export default AvisosListPage;
+export default EnquetesListPage;

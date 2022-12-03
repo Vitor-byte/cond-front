@@ -30,7 +30,7 @@ class CancelarReserva extends React.Component {
             let res = await areasService.consutarReserva(reservaId)
             console.log(res);
             this.setState({ reserva: res.data[0]})
-            if(this.state.reserva.situacao === "Aberta"){
+            if(this.state.reserva.situacao === "Reservada"){
                 this.setState({ situacao: true})            
             }
             console.log(res);
@@ -64,7 +64,7 @@ class CancelarReserva extends React.Component {
         return (
             <div className="container">
 
-                <PageTop title={"Reserva"} desc={"cadastro de area"}>
+                <PageTop title={"Reserva"} >
                     <button className="btn btn-light" onClick={() => this.props.history.goBack()}>
                         Voltar
                     </button>
@@ -86,7 +86,7 @@ class CancelarReserva extends React.Component {
                             <p>{this.state.reserva?.data}</p>
                         </div>
                         <div className="post-info">
-                            <h4>Horario</h4>
+                            <h4>Horário</h4>
                             <p>{this.state.reserva?.horario_inicial+"-"+this.state.reserva?.horario_final}</p>
                         </div>
                         <div className="post-info">

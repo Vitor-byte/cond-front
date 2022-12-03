@@ -11,7 +11,7 @@ class AlterarAviso extends React.Component {
 
         // State iniciado com atributos do post vazios
         this.state = {
-            id_aviso: null,
+            id_aviso: '',
             titulo : '',
             descricao : '',
             redirectTo: null
@@ -84,21 +84,25 @@ class AlterarAviso extends React.Component {
             )
         }
 
-        let title = this.state.id_aviso ? 'Editar Aviso' : 'Novo Aviso';
-        let desc = this.state.id_aviso ? 'Editar informações de um aviso' : 'Formulário de criação de aviso';
-
         return (
             <div className="container">
 
-                <PageTop title={title} desc={desc}>
-                    <button className="btn btn-light" onClick={() => this.props.history.replace('/avisos-list')}>
-                        Cancelar
-                    </button>
-                    <button className="btn btn-primary" onClick={() => this.sendPost()}>
-                        Salvar
-                    </button>
+                <PageTop title="Aviso" >
                 </PageTop>
-
+                <div className="post-info">
+                            <h4>ID</h4>
+                            <p>{this.state.id_aviso}</p>
+                        </div>
+                <div className="form-group">
+                        <label htmlFor="title">Título</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="title"
+                            value={this.state.titulo}
+                            onChange={e => this.setState({ titulo: e.target.value })} />
+                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
+                    </div>
                 <form onSubmit={e => e.preventDefault()}>
                     <div className="form-group">
                         <label htmlFor="title">Titulo</label>
@@ -120,7 +124,14 @@ class AlterarAviso extends React.Component {
                             onChange={e => this.setState({ descricao: e.target.value })} />
                         {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
+                    
                 </form>
+                <button className="btn btn-light" onClick={() => this.props.history.replace('/avisos-list')}>
+                        Cancelar
+                    </button>
+                    <button className="btn btn-primary" onClick={() => this.sendPost()}>
+                        Salvar
+                    </button>
             </div>
         )
     }

@@ -10,6 +10,7 @@ class ConsultarChamado extends React.Component {
         super(props)
         this.state = {
             chamado: '',
+            resposta:[],
             redirectTo: null
         }
     }
@@ -23,11 +24,13 @@ class ConsultarChamado extends React.Component {
     }
 
     async consultarChamado(chamadoId) {
-        
-            let res = await chamadosService.consultarChamadoResposta(chamadoId)
-            console.log(res);
+            let res = await chamadosService.consultarChamado(chamadoId)
+            let res2 = await chamadosService.consultarChamadoResposta(chamadoId)
+            console.log(res2);
             this.setState({ chamado: res.data[0] })
-            console.log(this.chamado);
+            this.setState({ resposta: res2.data })
+         
+
         
     }
     render() {
@@ -41,7 +44,7 @@ class ConsultarChamado extends React.Component {
         return (
             <div className="container">
 
-                <PageTop title={"Chamado"} desc={"Cadastro do chamado"}>
+                <PageTop title={"Chamado"}>
                     <button className="btn btn-light" onClick={() => this.props.history.goBack()}>
                         Cancelar
                     </button>
@@ -69,7 +72,14 @@ class ConsultarChamado extends React.Component {
                         
                         <div className="post-info">
                             <h4>Resposta</h4>
-                            <p>{this.state.chamado?.resposta}</p>
+                            <p>{this.state.resposta.map(respostas => (
+               
+                            <p>{respostas.resposta}</p>
+                    
+           
+                
+                             ))}
+                            </p>
                         </div>
                     
                        

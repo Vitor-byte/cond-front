@@ -32,6 +32,13 @@ import AlterarArea from './pages/areas/alterar-area/alterar-area.page';
 import AtenderChamado from './pages/chamados/atender-chamado/atender-chamado.page';
 import ReservarArea from './pages/areas/reservar-area/reservar-area.page';
 import CondChamadosListPage from './pages/chamados/chamados-list/cond-chamados-list.page';
+import CondAvisosListPage from './pages/avisos/avisos-list/cond-avisos-list.page';
+
+import IncluirEnquete from './pages/enquetes/incluir-enquete/incluir-enquete.page';
+import EnquetesListPage from './pages/enquetes/enquetes-list/enquetes-list.page';
+import AlterarEnquete from './pages/enquetes/alterar-enquete/alterar-enquete.page';
+import CondEnquetesListPage from './pages/enquetes/enquetes-list/cond-enquetes-list.page';
+import VotarEnquete from './pages/enquetes/votar-enquete/votar-enquete.page';
 
 class App extends React.Component {
 
@@ -76,10 +83,13 @@ class App extends React.Component {
               <Link to="/condominos-list" className="nav-item nav-link">Condôminos</Link>
               <Link to="/avisos-list" className="nav-item nav-link">Avisos</Link>
               <Link to="/chamados-list" className="nav-item nav-link">Chamados</Link>
-              <Link to="/cond-chamados-list" className="nav-item nav-link">Chamados cond</Link>
               <Link to="/areas-list" className="nav-item nav-link">Areas</Link>
+              <Link to="/cond-chamados-list" className="nav-item nav-link">Chamados cond</Link>
               <Link to="/cond-areas-list" className="nav-item nav-link">Areas cond</Link>
               <Link to="/reservas-list" className="nav-item nav-link">Reservas cond</Link>
+              <Link to="/cond-avisos-list" className="nav-item nav-link">Avisos cond</Link>
+              <Link to="/enquetes-list" className="nav-item nav-link">Enquetes</Link>
+              <Link to="/cond-enquetes-list" className="nav-item nav-link">Enquetes cond</Link>
 
             </div>
             {(this.state.userData) ? (
@@ -102,6 +112,7 @@ class App extends React.Component {
 
 
           <Route path="/avisos-list" component={AvisosListPage} />
+          <Route path="/cond-avisos-list" component={CondAvisosListPage} />
           <Route path="/incluir-aviso" component={IncluirAviso} />
           <Route path="/alterar-aviso/:id_aviso" component={AlterarAviso} />
           <Route path="/consultar-aviso/:id_aviso" component={ConsultarAviso} />
@@ -110,7 +121,7 @@ class App extends React.Component {
           <Route path="/incluir-chamado" component={IncluirChamado} />
           <Route path="/atender-chamado/:id_chamado" component={AtenderChamado} />
           <Route path="/consultar-chamado/:id_chamado" component={ConsultarChamado} />
-          <Route path="/cond-chamados-list/:id_chamado" component={CondChamadosListPage} />
+          <Route path="/cond-chamados-list" component={CondChamadosListPage} />
 
           <Route path="/cond-areas-list" component={CondAreasList} />
           <Route path="/areas-list" component={AreasListPage} />
@@ -120,6 +131,12 @@ class App extends React.Component {
           <Route path="/reservar-area/:id_area_comum" component={ReservarArea} />
           <Route path="/reservas-list" component={ReservasListPage} />
           <Route path="/cancelar-reserva/:id_reserva" component={CancelarReserva} />
+
+          <Route path="/enquetes-list" component={EnquetesListPage} />
+          <Route path="/cond-enquetes-list" component={CondEnquetesListPage} />
+          <Route path="/incluir-enquete" component={IncluirEnquete} />
+          <Route path="/alterar-enquete/:id_enquete" component={AlterarEnquete} />
+          <Route path="/votar-enquete/:id_enquete" component={VotarEnquete} />
 
       </BrowserRouter>
     );

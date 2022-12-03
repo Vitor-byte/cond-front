@@ -27,6 +27,10 @@ const avisosService = {
         const enpoint = apiUrl + "/chamado/" + chamadoId
         return axios.get(enpoint)
     },
+    async consultarChamadoUsuario(chamadoId){
+        const enpoint = apiUrl + "/chamado/usuario/" + chamadoId
+        return axios.get(enpoint)
+    },
     async consultarChamadoResposta(chamadoId){
         const enpoint = apiUrl + "/chamado/resposta/" + chamadoId
         return axios.get(enpoint)

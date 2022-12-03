@@ -11,6 +11,7 @@ class incluirChamado extends React.Component {
 
         // State iniciado com atributos do chamado vazios
         this.state = {
+            id_usuario:4,
             chamado: '',
             titulo : '',
             descricao : '',
@@ -51,7 +52,8 @@ class incluirChamado extends React.Component {
         let data = {
             titulo : this.state.titulo,
             descricao: this.state.descricao,
-            tipo: this.state.tipo
+            tipo: this.state.tipo,
+            id_usuario: this.state.id_usuario,
         }
 
         if(!data.titulo || data.titulo === ''){
@@ -63,7 +65,7 @@ class incluirChamado extends React.Component {
             this.descricao.focus()        
             return
         }
-        if(!data.tipo || data.tipo === ''){
+        if(data.tipo === 'Selecione'){
             this.tipo.focus()        
             return
         }
@@ -130,7 +132,9 @@ class incluirChamado extends React.Component {
                             className="form-control"
                             id="situacao"
                             value={this.state.tipo}
+                            ref={(input) => { this.tipo = input }}
                             onChange={e => this.setState({ tipo: e.target.value })}>
+                        <option value="Selecione" selected>Selecione</option>
                         <option value="Reclamação">Reclamação</option>
                         <option value="Reclamação">Reclamação</option>
                         <option value="Reclamação">Reclamação</option>

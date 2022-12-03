@@ -73,10 +73,7 @@ class ChamadosListPage extends React.Component {
         return (
             <div className="container">
 
-                <PageTop title={"Chamados"} desc={"Listagem dos chamados"}>
-                    <button className="btn btn-primary" onClick={() => this.props.history.push('/incluir-chamado')}>
-                        Novo chamado
-                    </button>
+                <PageTop title={"Chamados"}>
                 </PageTop>
                 <button className="btn chamado" onClick={() => this.chamadoAbertos()}>
                         Aberto
@@ -128,6 +125,8 @@ class ChamadosListPage extends React.Component {
                 <thead>
                                <tr>
                                 <th>ID</th>
+                                <td></td>
+
                                 <th>Título</th>
                                 <th>Situação</th>
                                 <th>Data de emissão</th>
@@ -145,7 +144,8 @@ class ChamadosListPage extends React.Component {
                     <Link to={"/atender-chamado/" + chamados.id_chamado} key={chamados.id_chamado}>
                     <td>{chamados.id_chamado}</td>
                     </Link>
-                           
+                    <td>{chamados.id_usuario}</td>
+
                     <td>{chamados.titulo}</td>
                     <td>{chamados.situacao}</td>
                     <td>{chamados.data_emissao}</td>

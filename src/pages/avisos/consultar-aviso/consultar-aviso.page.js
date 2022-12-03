@@ -62,7 +62,7 @@ class ConsultarAviso extends React.Component {
         return (
             <div className="container">
 
-                <PageTop title={"Aviso"} desc={"cadastro do aviso"}>
+                <PageTop title={"Aviso"}>
                     <button className="btn btn-light" onClick={() => this.props.history.goBack()}>
                         Voltar
                     </button>
@@ -76,27 +76,18 @@ class ConsultarAviso extends React.Component {
                             <p>{this.state.aviso?.id_aviso}</p>
                         </div>
                         <div className="post-info">
-                            <h4>Titulo</h4>
+                            <h4>ID</h4>
+                            <p>{this.state.aviso?.data_emissao}</p>
+                        </div>
+                        <div className="post-info">
+                            <h4>Título</h4>
                             <p>{this.state.aviso?.titulo}</p>
                         </div>
                         <div className="post-info">
                             <h4>Descrição</h4>
                             <p>{this.state.aviso?.descricao}</p>
                         </div>
-                        <div className="btn-group" role="group" aria-label="Basic example">
-                            <button
-                                type="button"
-                                className="btn btn-sm btn-outline-danger"
-                                onClick={() => this.deletePost(this.state.aviso.id_aviso)}>
-                                Excluir
-                            </button>
-                            <button
-                                type="button"
-                                className="btn btn-sm btn-outline-primary"
-                                onClick={() => this.props.history.push('/avisos-edit/' + this.state.aviso.id_aviso)}>
-                                Editar
-                            </button>
-                        </div>
+                        
                     </div>
 
                 </div>
