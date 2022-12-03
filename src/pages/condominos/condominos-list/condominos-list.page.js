@@ -4,6 +4,8 @@ import PageTop from '../../../components/page-top/page-top.component';
 import 'semantic-ui-css/semantic.min.css'
 import { Table } from 'semantic-ui-react'
 import condominosService from '../../../services/condominos.service';
+import authService from '../../../services/auth.service';
+
 import './condominos-list.page.css';
 
 class CondominosListPage extends React.Component {
@@ -19,11 +21,17 @@ class CondominosListPage extends React.Component {
 
     // Função que é executada assim que o componente carrega.
     componentDidMount() {
-    
+      
+        let userData = authService.getLoggedUser();
+        console.log(userData)
+        if(!userData){
+            this.setState({redirectTo : "/login"})
+        
+        }else{
             this.getCondominos()
-
+        }
+    
     }
-
     // Função responsável por chamar o serviço e carregar os posts.
     async getCondominos() {
         try {

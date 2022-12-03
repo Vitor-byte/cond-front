@@ -1,7 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
-//import authService from '../../services/auth.service';
 import condominosService from '../../../services/condominos.service';
 
 

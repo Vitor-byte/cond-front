@@ -68,32 +68,34 @@ class App extends React.Component {
   render() {
     return (
       <BrowserRouter>
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <Link to="/" className="navbar-brand">Condominio</Link>
-          <button className="navbar-toggler"
-            type="button"
-            data-toggle="collapse"
-            data-target="#navbarMenu"
-            aria-controls="navbarMenu">
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          
-          <div className="collapse navbar-collapse" id="navbarMenu">
-            <div className="navbar-nav">
-              <Link to="/" className="nav-item nav-link">Home</Link>
-              <Link to="/condominos-list" className="nav-item nav-link">Condôminos</Link>
-              <Link to="/avisos-list" className="nav-item nav-link">Avisos</Link>
-              <Link to="/chamados-list" className="nav-item nav-link">Chamados</Link>
-              <Link to="/areas-list" className="nav-item nav-link">Areas</Link>
-              <Link to="/cond-chamados-list" className="nav-item nav-link">Chamados cond</Link>
-              <Link to="/cond-areas-list" className="nav-item nav-link">Areas cond</Link>
-              <Link to="/reservas-list" className="nav-item nav-link">Reservas cond</Link>
-              <Link to="/cond-avisos-list" className="nav-item nav-link">Avisos cond</Link>
-              <Link to="/enquetes-list" className="nav-item nav-link">Enquetes</Link>
-              <Link to="/cond-enquetes-list" className="nav-item nav-link">Enquetes cond</Link>
-
-            </div>
+            <div>
             {(this.state.userData) ? (
+                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                 <Link to="/" className="navbar-brand">Condominio</Link>
+                 <button className="navbar-toggler"
+                   type="button"
+                   data-toggle="collapse"
+                   data-target="#navbarMenu"
+                   aria-controls="navbarMenu">
+                   <span className="navbar-toggler-icon"></span>
+                 </button>
+                 
+                 <div className="collapse navbar-collapse" id="navbarMenu">
+                   <div className="navbar-nav">
+                     <Link to="/" className="nav-item nav-link">Home</Link>
+                     <Link to="/condominos-list" className="nav-item nav-link">Condôminos</Link>
+                     <Link to="/avisos-list" className="nav-item nav-link">Avisos</Link>
+                     <Link to="/chamados-list" className="nav-item nav-link">Chamados</Link>
+                     <Link to="/areas-list" className="nav-item nav-link">Areas</Link>
+                     <Link to="/cond-chamados-list" className="nav-item nav-link">Chamados cond</Link>
+                     <Link to="/cond-areas-list" className="nav-item nav-link">Areas cond</Link>
+                     <Link to="/reservas-list" className="nav-item nav-link">Reservas cond</Link>
+                     <Link to="/cond-avisos-list" className="nav-item nav-link">Avisos cond</Link>
+                     <Link to="/enquetes-list" className="nav-item nav-link">Enquetes</Link>
+                     <Link to="/cond-enquetes-list" className="nav-item nav-link">Enquetes cond</Link>
+                  </div>
+                   </div>
+              
                 <div className="nav-user">
                   <div className="nav-user__info">
                     <h4>{this.state.userData[0].nome}</h4>
@@ -101,9 +103,10 @@ class App extends React.Component {
                   </div>
                   <button className="btn btn-outline-dark" onClick={e => this.logout()}>Sair</button>
                 </div>
+                </nav>
               ) : null}
           </div>
-        </nav>
+        
      
           <Route path="/" exact={true} component={HomePage} />
           <Route path="/login" component={props => <LoginPage {...props} onLogin={() => this.loadUserData()}/>}/>          
