@@ -34,6 +34,8 @@ class VotarEnquete extends React.Component {
 
     // Função que recupera os dados do post caso seja uma edição
     async consultarEnquete(enqueteId){
+        console.log(enqueteId);
+
         try {
             let res = await enquetesService.consultarEnquete(enqueteId)
             let res2 = await enquetesService.consultarOpcoes(enqueteId)
@@ -52,13 +54,14 @@ class VotarEnquete extends React.Component {
         }
     }
     async votarEnquete(enqueteId){
+        let data = {
+            id_usuario: this.state.enquete.id_usuario,
+            id_enquete:this.state.enquete.id_enquete,
+           
+        }
         try {
-            let res = await enquetesService.consultarEnquete(enqueteId)
-            let res2 = await enquetesService.consultarOpcoes(enqueteId)
+            let res = await enquetesService.votarEnquete(data)
             console.log(res);
-            this.setState({enquete: res.data[0]})
-            this.setState({opcoes: res2.data})
-            console.log(this.state.enquete);
 
         } catch (error) {
             console.log(error);
@@ -107,7 +110,7 @@ class VotarEnquete extends React.Component {
 
                     <div >
                           
-                          <input id={opcoes.opcao}type="radio" name="opcao"value= {opcoes.opcao}   onChange={e => this.setState({ opcao: e.target.value })} ></input>
+                          <input id={opcoes.id_opcao}type="radio" name="opcao"value= {opcoes.opcao}   onChange={e => this.setState({ opcao: e.target.value })} ></input>
                         <label htmlFor={key.toString()}>{opcoes.opcao}</label>
          
                   

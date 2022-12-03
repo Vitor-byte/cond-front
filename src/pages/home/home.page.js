@@ -20,7 +20,11 @@ class HomePage extends React.Component {
     }
 
     render() {
-      
+        if(this.state.redirectTo){
+            return(
+                <Redirect to={this.state.redirectTo}/>
+            )
+        }
         return (
             <div className="container">
                 <PageTop title={"Home"} desc={"Página inicial do sistema."}/>

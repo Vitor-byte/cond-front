@@ -1,3 +1,5 @@
+
+
 import React from "react";
 import authService from "../../services/auth.service";
 
@@ -8,7 +10,7 @@ class Login extends React.Component {
     // Iniciando o state com os valores dos campos vazios
     this.state = {
       email: "",
-      password: "",
+      senha: "",
     };
   }
 
@@ -18,13 +20,32 @@ class Login extends React.Component {
 
     const data = {
       email: this.state.email,
-      password: this.state.password,
+      senha: this.state.senha,
     };
 
+    if (!data.email || data.email == "") {
+      window.alert("E-mail é obrigatório");
+      return;
+    }
 
+    if (!data.senha || data.senha == "") {
+      window.alert("Senha é obrigatória");
+      return;
+    }
+
+    try {
+      console.log(data)
+
+      let res = await authService.sendLogin(data);
+      console.log(res)
+
+      authService.setLoggedUser(res.data);
       this.props.onLogin();
-      this.props.history.replace("/condominos-list");
-   
+      this.props.history.replace("/");
+    } catch (error) {
+      console.log("error", error)
+      window.alert("Não foi possível efetuar o login.");
+    }
   }
 
   render() {
@@ -45,14 +66,14 @@ class Login extends React.Component {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="password">Senha</label>
+                <label htmlFor="senha">Senha</label>
                 <input
-                  type="password"
+                  type="senha"
                   className="form-control"
-                  id="password"
+                  id="senha"
                   placeholder="Insira sua senha"
-                  value={this.state.password}
-                  onChange={(e) => this.setState({ password: e.target.value })}
+                  value={this.state.senha}
+                  onChange={(e) => this.setState({ senha: e.target.value })}
                 />
               </div>
               <button type="submit" className="btn btn-primary">
@@ -67,3 +88,4 @@ class Login extends React.Component {
 }
 
 export default Login;
+

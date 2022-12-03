@@ -8,11 +8,12 @@ const authService = {
     // Função que se comunica com o back-end para efetuar o login
     async sendLogin(data){
         let endpoint = apiUrl + "/login";
-        return axios.get(endpoint, data)
+        return axios.post(endpoint, data)
     },
 
     // Função que salva os dados do usuário no localstorage
     setLoggedUser(userData){
+
         try {
             let parsedData = JSON.stringify(userData)
             localStorage.setItem("user", parsedData)

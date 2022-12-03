@@ -55,6 +55,7 @@ class App extends React.Component {
   
   loadUserData(){
     let userData = authService.getLoggedUser()
+    console.log(userData)
     if(userData){
       this.setState({ userData : userData })
     }
@@ -64,7 +65,6 @@ class App extends React.Component {
     authService.clearLoggedUser();
     window.location.reload();
   }
-
   render() {
     return (
       <BrowserRouter>
@@ -77,6 +77,7 @@ class App extends React.Component {
             aria-controls="navbarMenu">
             <span className="navbar-toggler-icon"></span>
           </button>
+          
           <div className="collapse navbar-collapse" id="navbarMenu">
             <div className="navbar-nav">
               <Link to="/" className="nav-item nav-link">Home</Link>
@@ -95,8 +96,8 @@ class App extends React.Component {
             {(this.state.userData) ? (
                 <div className="nav-user">
                   <div className="nav-user__info">
-                    <h4>{this.state.userData.name}</h4>
-                    <p>{this.state.userData.email}</p>
+                    <h4>{this.state.userData[0].nome}</h4>
+                    <p>{this.state.userData[0].email}</p>
                   </div>
                   <button className="btn btn-outline-dark" onClick={e => this.logout()}>Sair</button>
                 </div>
@@ -105,7 +106,7 @@ class App extends React.Component {
         </nav>
      
           <Route path="/" exact={true} component={HomePage} />
-          <Route path="/login" component={props => <LoginPage {...props} onLogin={() => this.loadUserData()}/>}/>
+          <Route path="/login" component={props => <LoginPage {...props} onLogin={() => this.loadUserData()}/>}/>          
           <Route path="/condominos-list" component={CondominosListPage} />
           <Route path="/incluir-condomino" component={IncluirCondomino} />
           <Route path="/alterar-condomino/:id_usuario" component={AlterarCondomino} />
