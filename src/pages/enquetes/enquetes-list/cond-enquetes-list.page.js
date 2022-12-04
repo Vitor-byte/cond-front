@@ -17,9 +17,12 @@ class CondEnquetesListPage extends React.Component {
 
     // Função que é executada assim que o componente carrega.
     componentDidMount() {
-    
-            this.consultarEnquetes()
-
+        let userData = authService.getLoggedUser();
+        if(userData && userData[0].tipo === 'Condomino'){
+            this.consultarEnquetes()  
+        }else{                                     
+            this.props.history.replace('/erro')
+        }
     }
 
     // Função responsável por chamar o serviço e carregar os posts.

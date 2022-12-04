@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import enquetesService from '../../../services/enquetes.service';
@@ -11,6 +11,7 @@ class IncluirEnquete extends React.Component {
 
         // State iniciado com atributos do post vazios
         this.state = {
+            enquete:'',
             titulo: '',
             descricao: '',
             opcao1: '',
@@ -28,25 +29,17 @@ class IncluirEnquete extends React.Component {
     componentDidMount(){
     
         // Verificando se id foi passado nos parâmetros da url
-        if(this.props?.match?.params?.id_aviso){
-            console.log();
-            let avisoId = this.props.match.params.id_aviso
-            console.log(avisoId);
-            this.getAviso(avisoId)
+        let userData = authService.getLoggedUser();
+        console.log(userData)
+        if( userData && userData[0].tipo === 'Sindico'){
+            this.render()
+        }else{
+            this.props.history.replace('/erro')
         }
+    
+
     }
 
-    // Função que recupera os dados do post caso seja uma edição
-    async getAviso(avisoId){
-        try {
-            let res = await enquetesService.getOne(avisoId)
-            let aviso = res.data[0]
-            this.setState(aviso)
-        } catch (error) {
-            console.log(error);
-            alert("Não foi possível carregar aviso.")
-        }
-    }
 
     // Função responsável por salvar o post
     async incluirEnquete(){
@@ -55,9 +48,11 @@ class IncluirEnquete extends React.Component {
         let data = {
             titulo : this.state.titulo,
             descricao : this.state.descricao,
-            opcao: [this.state.opcao1,this.state.opcao2,
-            this.state.opcao3,this.state.opcao4,this.state.opcao5]
-            
+            opcao1:  this.state.opcao1, 
+            opcao2:  this.state.opcao2, 
+            opcao3:  this.state.opcao3, 
+            opcao4:  this.state.opcao4, 
+            opcao5:  this.state.opcao5, 
         }
         console.log(data)
  
@@ -70,8 +65,32 @@ class IncluirEnquete extends React.Component {
             this.descricao.focus()        
             return;
         }
+        if(!data.opcao1 || data.opcao1 === ''){
+            this.opcao1.focus()        
+            return;
+        }
+        if(!data.opcao2 || data.opcao2 === ''){
+            this.opcao2.focus()        
+            return;
+        }
+        if(!data.opcao3 || data.opcao3 === ''){
+            this.opcao3.focus()        
+            return;
+        }
+        if(!data.opcao4 || data.opcao4 === ''){
+            this.opcao4.focus()        
+            return;
+        }
+        if(!data.opcao5 || data.opcao5 === ''){
+            this.opcao5.focus()        
+            return;
+        }
         try {
-             await enquetesService.incluirEnquete(data, this.state.id_aviso)
+             let res = await enquetesService.incluirEnquete(data)
+             this.setState({ enquete: res.data[0]})
+             this.props.history.push('/alterar-enquete/'+this.state.enquete.id_enquete)
+          
+
         } catch (error) {
             console.log(error)
             

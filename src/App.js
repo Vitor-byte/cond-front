@@ -39,13 +39,16 @@ import EnquetesListPage from './pages/enquetes/enquetes-list/enquetes-list.page'
 import AlterarEnquete from './pages/enquetes/alterar-enquete/alterar-enquete.page';
 import CondEnquetesListPage from './pages/enquetes/enquetes-list/cond-enquetes-list.page';
 import VotarEnquete from './pages/enquetes/votar-enquete/votar-enquete.page';
+import ErrorPage from './pages/home/erro404.page';
 
 class App extends React.Component {
 
   constructor(props){
     super(props);
     this.state = {
-      userData : null
+      userData : null,
+      cond:false,
+      sind:null,
     }
   }
 
@@ -55,10 +58,18 @@ class App extends React.Component {
   
   loadUserData(){
     let userData = authService.getLoggedUser()
-    console.log(userData)
     if(userData){
-      this.setState({ userData : userData })
-    }
+     this.setState({ userData : userData })
+     if(userData[0].tipo === 'Condomino'){
+      this.setState({ cond : true })
+ 
+   }
+   if(userData[0].tipo === 'Sindico'){
+    this.setState({ sind : true })
+
+ }
+  }
+   
   }
 
   logout(){
@@ -68,7 +79,7 @@ class App extends React.Component {
   render() {
     return (
       <BrowserRouter>
-            <div>
+           <div>
             {(this.state.userData) ? (
                  <nav className="navbar navbar-expand-lg navbar-light bg-light">
                  <Link to="/" className="navbar-brand">Condominio</Link>
@@ -79,22 +90,31 @@ class App extends React.Component {
                    aria-controls="navbarMenu">
                    <span className="navbar-toggler-icon"></span>
                  </button>
-                 
-                 <div className="collapse navbar-collapse" id="navbarMenu">
+                 {this.state.cond && 
+                   <div className="collapse navbar-collapse" id="navbarMenu">
+                   <div className="navbar-nav">
+                     <Link to="/" className="nav-item nav-link">Home</Link>
+                     <Link to="/cond-chamados-list" className="nav-item nav-link">Chamados cond</Link>
+                     <Link to="/cond-areas-list" className="nav-item nav-link">Areas cond</Link>
+                     <Link to="/reservas-list" className="nav-item nav-link">Reservas cond</Link>
+                     <Link to="/cond-avisos-list" className="nav-item nav-link">Avisos cond</Link>
+                     <Link to="/cond-enquetes-list" className="nav-item nav-link">Enquetes cond</Link>
+                  </div>
+                   </div>
+                 }
+                {this.state.sind && 
+                   <div className="collapse navbar-collapse" id="navbarMenu">
                    <div className="navbar-nav">
                      <Link to="/" className="nav-item nav-link">Home</Link>
                      <Link to="/condominos-list" className="nav-item nav-link">Condôminos</Link>
                      <Link to="/avisos-list" className="nav-item nav-link">Avisos</Link>
                      <Link to="/chamados-list" className="nav-item nav-link">Chamados</Link>
                      <Link to="/areas-list" className="nav-item nav-link">Areas</Link>
-                     <Link to="/cond-chamados-list" className="nav-item nav-link">Chamados cond</Link>
-                     <Link to="/cond-areas-list" className="nav-item nav-link">Areas cond</Link>
-                     <Link to="/reservas-list" className="nav-item nav-link">Reservas cond</Link>
-                     <Link to="/cond-avisos-list" className="nav-item nav-link">Avisos cond</Link>
                      <Link to="/enquetes-list" className="nav-item nav-link">Enquetes</Link>
-                     <Link to="/cond-enquetes-list" className="nav-item nav-link">Enquetes cond</Link>
+        
                   </div>
                    </div>
+                 }
               
                 <div className="nav-user">
                   <div className="nav-user__info">
@@ -105,9 +125,8 @@ class App extends React.Component {
                 </div>
                 </nav>
               ) : null}
-          </div>
-        
-     
+          </div> 
+          
           <Route path="/" exact={true} component={HomePage} />
           <Route path="/login" component={props => <LoginPage {...props} onLogin={() => this.loadUserData()}/>}/>          
           <Route path="/condominos-list" component={CondominosListPage} />
@@ -141,6 +160,10 @@ class App extends React.Component {
           <Route path="/incluir-enquete" component={IncluirEnquete} />
           <Route path="/alterar-enquete/:id_enquete" component={AlterarEnquete} />
           <Route path="/votar-enquete/:id_enquete" component={VotarEnquete} />
+
+
+
+          <Route path="/erro" component={ErrorPage} />
 
       </BrowserRouter>
     );

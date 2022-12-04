@@ -21,8 +21,17 @@ class CondChamadosListPage extends React.Component {
 
     // Função que é executada assim que o componente carrega.
     componentDidMount() {
-    
-            this.consultarChamados(4)
+        let userData = authService.getLoggedUser();
+        if(userData && userData[0].tipo === 'Condomino'){
+            console.log(userData[0].id_usuario)
+            this.consultarChamados(userData.id_usuario)
+        }else{
+            
+            this.props.history.replace('/')
+
+            
+        }
+
 
     }
 

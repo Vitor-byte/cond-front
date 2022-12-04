@@ -12,6 +12,7 @@ class AlterarEnquete extends React.Component {
         // State iniciado com atributos do post vazios
         this.state = {
             enquete: '',
+            resultado:[],
             situacao:false,
             redirectTo: null
         }
@@ -20,14 +21,17 @@ class AlterarEnquete extends React.Component {
 
     // Função executada assim que o componente carrega
     componentDidMount(){
-    
-        // Verificando se id foi passado nos parâmetros da url
-        if(this.props?.match?.params?.id_enquete){
-            console.log();
-            let enqueteId = this.props.match.params.id_enquete
-            console.log(enqueteId);
-            this.consultarEnquete(enqueteId)
+        let userData = authService.getLoggedUser();
+        console.log(userData)
+        if( userData && userData[0].tipo === 'Sindico'){
+            if(this.props?.match?.params?.id_enquete){
+                let enqueteId = this.props.match.params.id_enquete
+                this.consultarEnquete(enqueteId)
+            }
+        }else{
+            this.props.history.replace('/erro')
         }
+    
     }
 
     // Função que recupera os dados do post caso seja uma edição
@@ -40,7 +44,9 @@ class AlterarEnquete extends React.Component {
         } catch (error) {
             console.log(error);
         }
-            
+        let res3 = await enquetesService.consultarResultado(enqueteId)
+        this.setState({resultado: res3.data})
+
         if(this.state.enquete.situacao ==="Aberta"){
             this.setState({situacao: true})
         
@@ -55,16 +61,22 @@ class AlterarEnquete extends React.Component {
             console.log(error);
             alert("Não foi possível carregar aviso.")
         }
+        window.location.reload();
+
+
     }
     async cancelarEnquete(enqueteId){
         try {
             let res = await enquetesService.cancelarEnquete(enqueteId)
             console.log(res);
 
+
         } catch (error) {
             console.log(error);
             alert("Não foi possível carregar aviso.")
         }
+        window.location.reload();
+
     }
 
     render() {
@@ -100,13 +112,26 @@ class AlterarEnquete extends React.Component {
                             <h4>Descrição</h4>
                             <p>{this.state.enquete?.descricao}</p>
                 </div>
-              
+                {this.state.resultado.map(resultado => (
+                    
+
+                    <div >
+                    
+                    <table  className="styled-table" >
+                        <tr className='styled-table thead'>
+                        <td>{resultado.opcao}</td>
+                        <td>{resultado.count}</td>
+                        </tr>
+                    </table>
+                               
+                    </div>
+                    ))}
                 
                 {this.state.situacao && <div className="post-info">
-                    <button className="btn btn-light" onClick={() => this.cancelarEnquete(this.state.id_enquete)}>
+                    <button className="btn btn-light" onClick={() => this.cancelarEnquete(this.state.enquete.id_enquete)}>
                         Cancelar
                     </button>
-                    <button className="btn btn-primary" onClick={() => this.finalizarEnquete(this.state.id_enquete)}>
+                    <button className="btn btn-primary" onClick={() => this.finalizarEnquete(this.state.enquete.id_enquete)}>
                         Finalizar
                     </button>
                 </div>}

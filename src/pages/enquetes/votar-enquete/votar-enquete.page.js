@@ -14,27 +14,50 @@ class VotarEnquete extends React.Component {
             enquete:'',
             opcoes:[],
             opcao:'',
+            vota:true,
             situacao:false,
-            redirectTo: null
+            redirectTo: null,
+            id_usuario:null,
         }
 
     }
 
     // Função executada assim que o componente carrega
     componentDidMount(){
-    
-        // Verificando se id foi passado nos parâmetros da url
-        if(this.props?.match?.params?.id_enquete){
-            console.log();
-            let enqueteId = this.props.match.params.id_enquete
-            console.log(enqueteId);
-            this.consultarEnquete(enqueteId)
+        let userData = authService.getLoggedUser();
+        if(userData && userData[0].tipo === 'Condomino'){
+            this.setState({ id_usuario:userData[0].id_usuario})
+            if(this.props?.match?.params?.id_enquete){
+                let id_usuario =userData[0].id_usuario
+                let enqueteId = this.props.match.params.id_enquete
+                this.verificaVoto(enqueteId, id_usuario)
+                this.consultarEnquete(enqueteId)
+            }
+        }else{                                     
+            this.props.history.replace('/erro')
         }
     }
+async verificaVoto(enqueteId, id_usuario){
+        let data = {
+            id_usuario: id_usuario,
+            id_enquete: enqueteId,
+        }
+        try {
+            let res = await enquetesService.verificaVoto(data)
+            console.log(res.data[0])
 
+            if(res.data[0].id_enquete = enqueteId){
+                this.setState({vota: false})
+            }
+            
+
+        } catch (error) {
+            console.log(error)
+        }
+            return
+    }
     // Função que recupera os dados do post caso seja uma edição
     async consultarEnquete(enqueteId){
-        console.log(enqueteId);
 
         try {
             let res = await enquetesService.consultarEnquete(enqueteId)
@@ -53,11 +76,11 @@ class VotarEnquete extends React.Component {
         
         }
     }
-    async votarEnquete(enqueteId){
+    async votarEnquete(){
         let data = {
-            id_usuario: this.state.enquete.id_usuario,
+            id_usuario: this.state.id_usuario,
             id_enquete:this.state.enquete.id_enquete,
-           
+            id_opcao:this.state.opcao,
         }
         try {
             let res = await enquetesService.votarEnquete(data)
@@ -105,21 +128,21 @@ class VotarEnquete extends React.Component {
                             <h4>Descrição</h4>
                             <p>{this.state.enquete.descricao}</p>
                 </div>
-                {this.state.opcoes.map((opcoes,key) => (
+                {this.state.situacao && this.state.vota && (this.state.opcoes.map((opcoes,key) => (
                     
 
                     <div >
                           
-                          <input id={opcoes.id_opcao}type="radio" name="opcao"value= {opcoes.opcao}   onChange={e => this.setState({ opcao: e.target.value })} ></input>
+                          <input id={opcoes.id_opcao}type="radio" name="opcao"value= {opcoes.id_opcao}   onChange={e => this.setState({ opcao: e.target.value })} ></input>
                         <label htmlFor={key.toString()}>{opcoes.opcao}</label>
          
                   
                                
                     </div>
-                    ))}
+                    )))}
     
                 
-                {this.state.situacao && <div className="post-info">
+                {(this.state.situacao && this.state.vota) && <div className="post-info">
                     <button className="btn btn-light" onClick={() => this.votarEnquete(this.state.enquete.id_enquete)}>
                         Votar
                     </button>

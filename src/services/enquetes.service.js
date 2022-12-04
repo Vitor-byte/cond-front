@@ -8,12 +8,21 @@ const enquetesService = {
         const enpoint = apiUrl + "/enquetes"
         return axios.get(enpoint)
     },
-    async consultarEnquete(avisoId){
-        const enpoint = apiUrl + "/enquete/" + avisoId
+
+    async verificaVoto(data){
+        const enpoint = apiUrl + "/enquete/verifica" 
+        return axios.post(enpoint,data)
+    },
+    async consultarResultado(enqueteId){
+        const enpoint = apiUrl + "/enquete/resultado/" + enqueteId
         return axios.get(enpoint)
     },
-    async consultarOpcoes(avisoId){
-        const enpoint = apiUrl + "/enquete/" + avisoId
+    async consultarEnquete(enqueteId){
+        const enpoint = apiUrl + "/enquete/" + enqueteId
+        return axios.get(enpoint)
+    },
+    async consultarOpcoes(enqueteId){
+        const enpoint = apiUrl + "/enquete/opcoes/" + enqueteId
         return axios.get(enpoint)
     },
     async incluirEnquete(data){
@@ -32,16 +41,6 @@ const enquetesService = {
         const enpoint = apiUrl + "/enquete/finalizar/" + enqueteId
         return axios.patch(enpoint)
     },
-
-    async edit(data, condominoId){
-        const enpoint = apiUrl + "/aviso/" + condominoId
-        return axios.patch(enpoint, data)
-    },
-    async delete(avisoId){
-        const enpoint = apiUrl + "/aviso/" + avisoId
-        return axios.delete(enpoint)
-    },
-
 
 }
 

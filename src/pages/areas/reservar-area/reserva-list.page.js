@@ -19,8 +19,9 @@ class ReservaList extends React.Component {
 
     // Função que é executada assim que o componente carrega
     componentDidMount() {
-        
-            this.consultarReservas(18)
+        let userData = authService.getLoggedUser();
+        console.log(userData[0].id_usuario)
+        this.consultarReservas(userData.id_usuario)
     }
 
     // Função que exclui o post, chamada ao clicar no botão "Excluir"
