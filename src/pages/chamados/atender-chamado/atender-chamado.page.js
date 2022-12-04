@@ -92,6 +92,10 @@ class AtenderChamado extends React.Component {
                             <p>{this.state.chamado?.id_chamado}</p>
                         </div>
                         <div className="post-info">
+                            <h4>Usuário</h4>
+                            <p>{this.state.chamado?.data_emissao}</p>
+                        </div>
+                        <div className="post-info">
                             <h4>Data emissão</h4>
                             <p>{this.state.chamado?.data_emissao}</p>
                         </div>

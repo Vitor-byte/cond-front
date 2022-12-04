@@ -9,9 +9,8 @@ class incluirChamado extends React.Component {
     constructor(props){
         super(props)
 
-        // State iniciado com atributos do chamado vazios
         this.state = {
-            id_usuario:4,
+            id_usuario:'',
             chamado: '',
             titulo : '',
             descricao : '',
@@ -21,29 +20,13 @@ class incluirChamado extends React.Component {
 
     }
 
-    // Função executada assim que o componente carrega
     componentDidMount(){
-    
-        // Verificando se id foi passado nos parâmetros da url
-        if(this.props?.match?.params?.id_chamado){
-            console.log();
-            let chamadoId = this.props.match.params.id_chamado
-            console.log(chamadoId);
-            this.getChamado(chamadoId)
-        }
-    }
-    async getChamado(chamadoId){
-        console.log(chamadoId);
-
-        try {
-            let res = await chamadosService.getOne(chamadoId)
-            let chamado = res.data[0]
-            console.log(chamado);
-            this.setState({ chamado: res.data[0] })
-   
-        } catch (error) {
-            console.log(error);
-            alert("Não foi possível carregar o chamado.")
+        let userData = authService.getLoggedUser();
+        if(userData && userData[0].tipo === 'Condomino'){
+            this.setState({ id_usuario: userData[0].id_usuario})
+            this.render()
+        }else{                                     
+            this.props.history.replace('/erro')
         }
     }
    
@@ -71,10 +54,8 @@ class incluirChamado extends React.Component {
         }
         try {
             let res = await chamadosService.incluirChamado(data)
-            let chamado = res.data[0]
-            this.setState(chamado)
-            console.log(chamado)
-            this.props.history.replace('/chamados-list')
+            this.props.history.push('/consultar-chamado/'+ res.data[0].id_chamado)
+
         } catch (error) {
             console.log(error);
             alert("Não foi possível cancelar o chamado."+error)
@@ -111,7 +92,6 @@ class incluirChamado extends React.Component {
                             value={this.state.titulo}
                             ref={(input) => { this.titulo = input }}
                             onChange={e => this.setState({ titulo: e.target.value })} />
-                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
                     <div className="form-group">
                         <label htmlFor="title">Descrição</label>
@@ -122,7 +102,6 @@ class incluirChamado extends React.Component {
                             value={this.state.descricao}
                             ref={(input) => { this.descricao = input }}
                             onChange={e => this.setState({ descricao: e.target.value })} />
-                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
 
                     <div className="form-group">
@@ -141,7 +120,7 @@ class incluirChamado extends React.Component {
                         <option value="Reclamação">Reclamação</option>
                         </select>
                     </div>
-                    <button className="btn btn-primary" onClick={() => this.incluirChamado( this.state.chamado)}>
+                    <button className="btn btn-primary" onClick={() => this.incluirChamado()}>
                         Incluir
                     </button>
                 </form>

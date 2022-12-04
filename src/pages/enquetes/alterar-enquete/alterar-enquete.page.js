@@ -3,13 +3,13 @@ import { Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import enquetesService from '../../../services/enquetes.service';
+import { Table } from 'semantic-ui-react'
 
 class AlterarEnquete extends React.Component {
 
     constructor(props){
         super(props)
 
-        // State iniciado com atributos do post vazios
         this.state = {
             enquete: '',
             resultado:[],
@@ -18,8 +18,6 @@ class AlterarEnquete extends React.Component {
         }
 
     }
-
-    // Função executada assim que o componente carrega
     componentDidMount(){
         let userData = authService.getLoggedUser();
         console.log(userData)
@@ -33,8 +31,6 @@ class AlterarEnquete extends React.Component {
         }
     
     }
-
-    // Função que recupera os dados do post caso seja uma edição
     async consultarEnquete(enqueteId){
         try {
             let res = await enquetesService.consultarEnquete(enqueteId)
@@ -112,20 +108,27 @@ class AlterarEnquete extends React.Component {
                             <h4>Descrição</h4>
                             <p>{this.state.enquete?.descricao}</p>
                 </div>
-                {this.state.resultado.map(resultado => (
-                    
-
-                    <div >
-                    
-                    <table  className="styled-table" >
-                        <tr className='styled-table thead'>
-                        <td>{resultado.opcao}</td>
-                        <td>{resultado.count}</td>
-                        </tr>
-                    </table>
+                <><Table fixed>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell>Opção</Table.HeaderCell>
+                                <Table.HeaderCell>Quantidade</Table.HeaderCell>
+                            </Table.Row>
+                        </Table.Header>
+                </Table></>
+              {this.state.resultado.map(resultado => (
+                    <><Table fixed>  
+                        <Table.Body>
+                            <Table.Row>
+                                <Table.Cell>{resultado.opcao}</Table.Cell>
+                                <Table.Cell>{resultado.count}</Table.Cell>
+                            </Table.Row>
+                        </Table.Body>
+                    </Table></>
                                
-                    </div>
-                    ))}
+                     
+                ))}
+                
                 
                 {this.state.situacao && <div className="post-info">
                     <button className="btn btn-light" onClick={() => this.cancelarEnquete(this.state.enquete.id_enquete)}>

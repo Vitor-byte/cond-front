@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import enquetesService from '../../../services/enquetes.service';
+import { Table } from 'semantic-ui-react'
 
 class EnquetesListPage extends React.Component {
 
@@ -52,38 +53,35 @@ class EnquetesListPage extends React.Component {
                     <button className="btn btn-primary" onClick={() => this.props.history.push('/incluir-enquete')}>
                         Nova enquete
                     </button>
-                </PageTop>
-                <table className='styled-table'>
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Título</th>
-                            <th>Situação</th>
-                            <th>Data emissão</th>
-                        </tr>
-                    </thead>
-                </table>
-                {/* Percorrendo o array de posts do state e renderizando cada um
-                dentro de um link que leva para a página de detalhes do post específico */}
-                {this.state.enquetes.map(enquetes => (
-                    
+                </PageTop>        
+            <><Table fixed>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell>ID</Table.HeaderCell>
+                                <Table.HeaderCell>Nome</Table.HeaderCell>
+                                <Table.HeaderCell>Situação</Table.HeaderCell>
+                                <Table.HeaderCell>Data emissão</Table.HeaderCell>
 
-                <div >
-                
-                <table  className="styled-table" >
-                    <tr className='styled-table thead'>
-                    <Link to={"/alterar-enquete/" + enquetes.id_enquete} key={enquetes.id_enquete}>
-                    <td>{enquetes.id_enquete}</td>
-                    </Link>
-                    <td>{enquetes.titulo}</td>
-                    <td>{enquetes.situacao}</td>
-                    <td>{enquetes.data_emissao}</td>
-                    </tr>
-                </table>
-                           
-                </div>
+                            </Table.Row>
+                        </Table.Header>
+                </Table></>
+              {this.state.enquetes.map(enquetes => (
+                    <><Table fixed>  
+                        <Table.Body>
+                            <Table.Row>
+                            <Link to={"/alterar-enquete/" + enquetes.id_enquete} key={enquetes.id_enquete}>
+
+                                <Table.Cell>{enquetes.id_enquete}</Table.Cell>
+                                </Link>
+                                <Table.Cell>{enquetes.titulo}</Table.Cell>
+                                <Table.Cell>{enquetes.situacao}</Table.Cell>
+                                <Table.Cell>{enquetes.data_emissao}</Table.Cell>
+                            </Table.Row>
+                        </Table.Body>
+                    </Table></>
+                               
+                     
                 ))}
-
             </div>
         )
     }

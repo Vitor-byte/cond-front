@@ -9,23 +9,21 @@ class ConsultarAviso extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            // Atributo para armazenar os dados do post
             aviso: null,
             redirectTo: null
         }
     }
 
-    // Função que é executada assim que o componente carrega
     componentDidMount() {
-        
-            // Recuperando os id do post na url
+        let userData = authService.getLoggedUser();
+        if(userData && userData[0].tipo === 'Condomino'){
             const avisoId = this.props.match.params.id_aviso
-            // Chamando a função que carrega os dados do post
-            console.log(avisoId);
             this.getAviso(avisoId)
+        }else{                                     
+            this.props.history.replace('/erro')
+        }       
     }
 
-    // Função que carrega os dados do post e salva no state
     async getAviso(avisoId) {
         
             let res = await avisosService.getOne(avisoId)
@@ -33,22 +31,6 @@ class ConsultarAviso extends React.Component {
             this.setState({ aviso: res.data[0] })
             console.log(this.aviso);
         
-    }
-
-    // Função que exclui o post, chamada ao clicar no botão "Excluir"
-    async deletePost(avisoId) {
-        
-        if (!window.confirm("Deseja realmente excluir este aviso?")) return;
-
-        try {
-            await avisosService.delete(avisoId)
-            alert("Aviso excluído com sucesso")
-            this.props.history.replace('/avisos-list')
-        } catch (error) {
-            console.log(error);
-            alert("Não foi excluir o aviso.")
-        }
-
     }
 
     render() {
@@ -63,9 +45,6 @@ class ConsultarAviso extends React.Component {
             <div className="container">
 
                 <PageTop title={"Aviso"}>
-                    <button className="btn btn-light" onClick={() => this.props.history.goBack()}>
-                        Voltar
-                    </button>
                 </PageTop>
 
                 <div className="row">

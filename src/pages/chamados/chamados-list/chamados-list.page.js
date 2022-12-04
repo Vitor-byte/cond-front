@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import chamadosService from '../../../services/chamados.service';
+import { Table } from 'semantic-ui-react'
 
 class ChamadosListPage extends React.Component {
 
@@ -87,33 +88,36 @@ class ChamadosListPage extends React.Component {
                 
                 {(this.state.aberto &&
                     <div>
-                        <table className='styled-table'>
-                <thead>
-                               <tr>
-                                <th>ID</th>
-                                <th>Título</th>
-                                <th>Situação</th>
-                                <th>Data de emissão</th>
-                                </tr>
-                                </thead>
-                                </table>
+                       <Table fixed>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell>ID</Table.HeaderCell>
+                                <Table.HeaderCell>Título</Table.HeaderCell>
+                                <Table.HeaderCell>Situação</Table.HeaderCell>
+                                <Table.HeaderCell>Data emissão</Table.HeaderCell>
+
+                            </Table.Row>
+                        </Table.Header>
+                        </Table>
+                       
+                       
 
                 {/* Percorrendo o array de posts do state e renderizando cada um
                 dentro de um link que leva para a página de detalhes do post específico */}
                 {this.state.chamados.map(chamados => (
-               
-                
-                <table  className="styled-table" >
-                    <tr >
-                    <Link to={"/atender-chamado/" + chamados.id_chamado} key={chamados.id_chamado}>
-                    <td>{chamados.id_chamado}</td>
-                    </Link>
-                           
-                    <td>{chamados.titulo}</td>
-                    <td>{chamados.situacao}</td>
-                    <td>{chamados.data_emissao}</td>
-                    </tr>
-                </table>
+                    <Table fixed>  
+                    <Table.Body>
+                        <Table.Row>
+                        <Link to={"/atender-chamado/" + chamados.id_chamado} key={chamados.id_chamado}>
+
+                            <Table.Cell>{chamados.id_chamado}</Table.Cell>
+                            </Link>
+                            <Table.Cell>{chamados.titulo}</Table.Cell>
+                            <Table.Cell>{chamados.situacao}</Table.Cell>
+                            <Table.Cell>{chamados.data_emissao}</Table.Cell>
+                        </Table.Row>
+                    </Table.Body>
+                </Table>
             
                  
                 ))}
@@ -121,75 +125,80 @@ class ChamadosListPage extends React.Component {
                 )}    
                 {(this.state.emAndamento &&
                     <div>
-                        <table className='styled-table'>
-                <thead>
-                               <tr>
-                                <th>ID</th>
-                                <td></td>
+                       <Table fixed>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell>ID</Table.HeaderCell>
+                                <Table.HeaderCell>Título</Table.HeaderCell>
+                                <Table.HeaderCell>Situação</Table.HeaderCell>
+                                <Table.HeaderCell>Data emissão</Table.HeaderCell>
 
-                                <th>Título</th>
-                                <th>Situação</th>
-                                <th>Data de emissão</th>
-                                </tr>
-                                </thead>
-                                </table>
+                            </Table.Row>
+                        </Table.Header>
+                        </Table>
+                       
+                       
 
                 {/* Percorrendo o array de posts do state e renderizando cada um
                 dentro de um link que leva para a página de detalhes do post específico */}
                 {this.state.chamados.map(chamados => (
-               
-                
-                <table  className="styled-table" >
-                    <tr >
-                    <Link to={"/atender-chamado/" + chamados.id_chamado} key={chamados.id_chamado}>
-                    <td>{chamados.id_chamado}</td>
-                    </Link>
-                    <td>{chamados.id_usuario}</td>
+                    <Table fixed>  
+                    <Table.Body>
+                        <Table.Row>
+                        <Link to={"/atender-chamado/" + chamados.id_chamado} key={chamados.id_chamado}>
 
-                    <td>{chamados.titulo}</td>
-                    <td>{chamados.situacao}</td>
-                    <td>{chamados.data_emissao}</td>
-                    </tr>
-                </table>
+                            <Table.Cell>{chamados.id_chamado}</Table.Cell>
+                            </Link>
+                            <Table.Cell>{chamados.titulo}</Table.Cell>
+                            <Table.Cell>{chamados.situacao}</Table.Cell>
+                            <Table.Cell>{chamados.data_emissao}</Table.Cell>
+                        </Table.Row>
+                    </Table.Body>
+                </Table>
             
                  
                 ))}
                     </div>
-                )}    
+                )} 
+                
+               
                 {(this.state.finalizado &&
                     <div>
-                        <table className='styled-table'>
-                <thead>
-                               <tr>
-                                <th>ID</th>
-                                <th>Título</th>
-                                <th>Situação</th>
-                                <th>Data de emissão</th>
-                                </tr>
-                                </thead>
-                                </table>
+                       <Table fixed>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell>ID</Table.HeaderCell>
+                                <Table.HeaderCell>Título</Table.HeaderCell>
+                                <Table.HeaderCell>Situação</Table.HeaderCell>
+                                <Table.HeaderCell>Data emissão</Table.HeaderCell>
+
+                            </Table.Row>
+                        </Table.Header>
+                        </Table>
+                       
+                       
 
                 {/* Percorrendo o array de posts do state e renderizando cada um
                 dentro de um link que leva para a página de detalhes do post específico */}
                 {this.state.chamados.map(chamados => (
-               
-                
-                <table  className="styled-table" >
-                    <tr >
-                    <Link to={"consultar-chamado/" + chamados.id_chamado} key={chamados.id_chamado}>
-                    <td>{chamados.id_chamado}</td>
-                    </Link>
-                           
-                    <td>{chamados.titulo}</td>
-                    <td>{chamados.situacao}</td>
-                    <td>{chamados.data_emissao}</td>
-                    </tr>
-                </table>
+                    <Table fixed>  
+                    <Table.Body>
+                        <Table.Row>
+                        <Link to={"/consultar-chamado/" + chamados.id_chamado} key={chamados.id_chamado}>
+
+                            <Table.Cell>{chamados.id_chamado}</Table.Cell>
+                            </Link>
+                            <Table.Cell>{chamados.titulo}</Table.Cell>
+                            <Table.Cell>{chamados.situacao}</Table.Cell>
+                            <Table.Cell>{chamados.data_emissao}</Table.Cell>
+                        </Table.Row>
+                    </Table.Body>
+                </Table>
             
                  
                 ))}
                     </div>
-                )}    
+                )} 
             
         
             </div>

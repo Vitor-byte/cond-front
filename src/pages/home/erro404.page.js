@@ -13,7 +13,6 @@ class ErrorPage extends React.Component {
     }   
 
     componentDidMount(){
-        let userData = authService.clearLoggedUser();
 
     }
     render() {

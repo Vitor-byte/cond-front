@@ -17,7 +17,17 @@ class ConsultarChamado extends React.Component {
 
     // Função que é executada assim que o componente carrega
     componentDidMount() {
-        
+        let userData = authService.getLoggedUser();
+        console.log(userData)
+        if( userData && userData[0].tipo === 'Condomino'){
+            if(this.props?.match?.params?.id_chamado){
+                let chamadoId = this.props.match.params.id_chamado
+                this.consultarChamado(chamadoId)
+            }
+        }else{
+            this.props.history.replace('/erro')
+        }
+    
             const chamadoId = this.props.match.params.id_chamado
             console.log(chamadoId);
             this.consultarChamado(chamadoId)
@@ -58,7 +68,7 @@ class ConsultarChamado extends React.Component {
                             <p>{this.state.chamado?.id_chamado}</p>
                         </div>
                         <div className="post-info">
-                            <h4>Titulo</h4>
+                            <h4>Título</h4>
                             <p>{this.state.chamado?.titulo}</p>
                         </div>
                         <div className="post-info">

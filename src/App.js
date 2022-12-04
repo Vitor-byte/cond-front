@@ -75,6 +75,7 @@ class App extends React.Component {
   logout(){
     authService.clearLoggedUser();
     window.location.reload();
+    this.props.history.push('/login')
   }
   render() {
     return (
@@ -94,11 +95,13 @@ class App extends React.Component {
                    <div className="collapse navbar-collapse" id="navbarMenu">
                    <div className="navbar-nav">
                      <Link to="/" className="nav-item nav-link">Home</Link>
-                     <Link to="/cond-chamados-list" className="nav-item nav-link">Chamados cond</Link>
-                     <Link to="/cond-areas-list" className="nav-item nav-link">Areas cond</Link>
-                     <Link to="/reservas-list" className="nav-item nav-link">Reservas cond</Link>
-                     <Link to="/cond-avisos-list" className="nav-item nav-link">Avisos cond</Link>
-                     <Link to="/cond-enquetes-list" className="nav-item nav-link">Enquetes cond</Link>
+                     <Link to="/cond-areas-list" className="nav-item nav-link">Áreas</Link>
+                     <Link to="/cond-avisos-list" className="nav-item nav-link">Avisos</Link>
+                     <Link to="/cond-enquetes-list" className="nav-item nav-link">Enquetes</Link>
+                     <Link to="/cond-chamados-list" className="nav-item nav-link">Meus chamados</Link>
+                     <Link to="/reservas-list" className="nav-item nav-link">Minhas reservas</Link>
+
+
                   </div>
                    </div>
                  }

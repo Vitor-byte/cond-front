@@ -3,20 +3,21 @@ import { Link, Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import enquetesService from '../../../services/enquetes.service';
+import { Table } from 'semantic-ui-react'
 
 class CondEnquetesListPage extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            // Atributo para armazenar o array de posts vindos da API.
             enquetes: [],
+            header:true,
             redirectTo: null
         }
     }
 
-    // Função que é executada assim que o componente carrega.
     componentDidMount() {
+        
         let userData = authService.getLoggedUser();
         if(userData && userData[0].tipo === 'Condomino'){
             this.consultarEnquetes()  
@@ -25,7 +26,6 @@ class CondEnquetesListPage extends React.Component {
         }
     }
 
-    // Função responsável por chamar o serviço e carregar os posts.
     async consultarEnquetes() {
         try {
             let res = await enquetesService.list()
@@ -48,39 +48,37 @@ class CondEnquetesListPage extends React.Component {
         return (
             <div className="container">
 
-                <PageTop title={"Enquetes"} desc={""}>
+                <PageTop title={"Enquetes"} >
                 </PageTop>
-                <table className='styled-table'>
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Título</th>
-                            <th>Situação</th>
-                            <th>Data emissão</th>
-                        </tr>
-                    </thead>
-                </table>
-                {/* Percorrendo o array de posts do state e renderizando cada um
-                dentro de um link que leva para a página de detalhes do post específico */}
-                {this.state.enquetes.map(enquetes => (
-                    
 
-                <div >
-                
-                <table  className="styled-table" >
-                    <tr className='styled-table thead'>
-                    <Link to={"/votar-enquete/" + enquetes.id_enquete} key={enquetes.id_enquete}>
-                    <td>{enquetes.id_enquete}</td>
-                    </Link>
-                    <td>{enquetes.titulo}</td>
-                    <td>{enquetes.situacao}</td>
-                    <td>{enquetes.data_emissao}</td>
-                    </tr>
-                </table>
-                           
-                </div>
+                <><Table fixed>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell>ID</Table.HeaderCell>
+                                <Table.HeaderCell>Nome</Table.HeaderCell>
+                                <Table.HeaderCell>Situação</Table.HeaderCell>
+                                <Table.HeaderCell>Data emissão</Table.HeaderCell>
+
+                            </Table.Row>
+                        </Table.Header>
+                </Table></>
+              {this.state.enquetes.map(enquetes => (
+                    <><Table fixed>  
+                        <Table.Body>
+                            <Table.Row>
+                            <Link to={"/votar-enquete/" + enquetes.id_enquete} key={enquetes.id_enquete}>
+
+                                <Table.Cell>{enquetes.id_enquete}</Table.Cell>
+                                </Link>
+                                <Table.Cell>{enquetes.titulo}</Table.Cell>
+                                <Table.Cell>{enquetes.situacao}</Table.Cell>
+                                <Table.Cell>{enquetes.data_emissao}</Table.Cell>
+                            </Table.Row>
+                        </Table.Body>
+                    </Table></>
+                               
+                     
                 ))}
-
             </div>
         )
     }

@@ -34,7 +34,7 @@ class VotarEnquete extends React.Component {
                 this.consultarEnquete(enqueteId)
             }
         }else{                                     
-            this.props.history.replace('/erro')
+            this.props.history.replace('/login')
         }
     }
 async verificaVoto(enqueteId, id_usuario){
@@ -94,6 +94,8 @@ async verificaVoto(enqueteId, id_usuario){
             this.setState({situacao: true})
         
         }
+        window.location.reload();
+
     }
     render() {
 
@@ -128,6 +130,7 @@ async verificaVoto(enqueteId, id_usuario){
                             <h4>Descrição</h4>
                             <p>{this.state.enquete.descricao}</p>
                 </div>
+                
                 {this.state.situacao && this.state.vota && (this.state.opcoes.map((opcoes,key) => (
                     
 

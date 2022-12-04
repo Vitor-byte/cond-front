@@ -3,26 +3,27 @@ import { Link, Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import avisosService from '../../../services/avisos.service';
+import { Table } from 'semantic-ui-react'
 
 class AvisosListPage extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            // Atributo para armazenar o array de posts vindos da API.
             avisos: [],
             redirectTo: null
         }
     }
 
-    // Função que é executada assim que o componente carrega.
     componentDidMount() {
-    
+        let userData = authService.getLoggedUser();
+        if(userData && userData[0].tipo === 'Sindico'){
             this.getAvisos()
-
+        }else{                                     
+            this.props.history.replace('/erro')
+        }
     }
 
-    // Função responsável por chamar o serviço e carregar os posts.
     async getAvisos() {
         try {
             let res = await avisosService.list()
@@ -45,41 +46,41 @@ class AvisosListPage extends React.Component {
         return (
             <div className="container">
 
-                <PageTop title={"Avisos"} desc={"Listagem dos avisos"}>
+                <PageTop title={"Avisos"} >
                     <button className="btn btn-primary" onClick={() => this.props.history.push('/incluir-aviso')}>
                         Novo aviso
                     </button>
                 </PageTop>
-                <table className='styled-table'>
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Título</th>
-                            <th>Data emissão</th>
-                        </tr>
-                    </thead>
-                </table>
-                {/* Percorrendo o array de posts do state e renderizando cada um
-                dentro de um link que leva para a página de detalhes do post específico */}
-                {this.state.avisos.map(avisos => (
-                    
-
-                <div >
                 
-                <table  className="styled-table" >
-                    <tr className='styled-table thead'>
-                    <Link to={"/alterar-aviso/" + avisos.id_aviso} key={avisos.id_aviso}>
-                    <td>{avisos.id_aviso}</td>
-                    </Link>
-                           
-                    <td>{avisos.titulo}</td>
-                    <td>{avisos.data_emissao}</td>
-                    </tr>
-                </table>
-                           
-                </div>
-                ))}
+                <><Table fixed>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell>ID</Table.HeaderCell>
+                                <Table.HeaderCell>Título</Table.HeaderCell>
+                                <Table.HeaderCell>Descrição</Table.HeaderCell>
+                                <Table.HeaderCell>Data emissão</Table.HeaderCell>
 
+                            </Table.Row>
+                        </Table.Header>
+                </Table></>
+              {this.state.avisos.map(avisos => (
+                    <><Table fixed>  
+                        <Table.Body>
+                            <Table.Row>
+                            <Link to={"/alterar-aviso/" + avisos.id_aviso} key={avisos.id_aviso}>
+
+                                <Table.Cell>{avisos.id_aviso}</Table.Cell>
+                                </Link>
+                                <Table.Cell>{avisos.titulo}</Table.Cell>
+                                <Table.Cell>{avisos.descricao}</Table.Cell>
+                                <Table.Cell>{avisos.data_emissao}</Table.Cell>
+                            </Table.Row>
+                        </Table.Body>
+                    </Table></>
+                               
+                     
+                ))}
+              
             </div>
         )
     }

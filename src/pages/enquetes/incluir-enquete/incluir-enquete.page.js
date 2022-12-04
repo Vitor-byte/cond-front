@@ -9,7 +9,6 @@ class IncluirEnquete extends React.Component {
     constructor(props){
         super(props)
 
-        // State iniciado com atributos do post vazios
         this.state = {
             enquete:'',
             titulo: '',
@@ -25,10 +24,8 @@ class IncluirEnquete extends React.Component {
 
     }
 
-    // Função executada assim que o componente carrega
     componentDidMount(){
     
-        // Verificando se id foi passado nos parâmetros da url
         let userData = authService.getLoggedUser();
         console.log(userData)
         if( userData && userData[0].tipo === 'Sindico'){
@@ -41,10 +38,8 @@ class IncluirEnquete extends React.Component {
     }
 
 
-    // Função responsável por salvar o post
     async incluirEnquete(){
         
-        // Reunindo dados
         let data = {
             titulo : this.state.titulo,
             descricao : this.state.descricao,
@@ -121,7 +116,6 @@ class IncluirEnquete extends React.Component {
                             value={this.state.titulo}
                             ref={(input) => { this.titulo = input }}
                             onChange={e => this.setState({ titulo: e.target.value })} />
-                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
                     <div className="form-group">
                         <label htmlFor="title">Descrição</label>
@@ -132,7 +126,6 @@ class IncluirEnquete extends React.Component {
                             value={this.state.descricao}
                             ref={(input) => { this.descricao = input }}
                             onChange={e => this.setState({ descricao: e.target.value })} />
-                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
                     <label htmlFor="title">Opções</label>
                     <div className="form-group">
@@ -144,7 +137,6 @@ class IncluirEnquete extends React.Component {
                             value={this.state.opcao1}
                             ref={(input) => { this.opcao1 = input }}
                             onChange={e => this.setState({ opcao1: e.target.value })} />
-                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
                     <div className="form-group">
             
@@ -155,7 +147,6 @@ class IncluirEnquete extends React.Component {
                             value={this.state.opcao2}
                             ref={(input) => { this.opcao2 = input }}
                             onChange={e => this.setState({ opcao2: e.target.value })} />
-                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
                     <div className="form-group">
                  
@@ -166,7 +157,6 @@ class IncluirEnquete extends React.Component {
                             value={this.state.opcao3}
                             ref={(input) => { this.opcao3 = input }}
                             onChange={e => this.setState({ opcao3: e.target.value })} />
-                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
                     <div className="form-group">
          
@@ -177,7 +167,6 @@ class IncluirEnquete extends React.Component {
                             value={this.state.opcao4}
                             ref={(input) => { this.opcao4 = input }}
                             onChange={e => this.setState({ opcao4: e.target.value })} />
-                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
                     <div className="form-group">
          
@@ -188,9 +177,8 @@ class IncluirEnquete extends React.Component {
                             value={this.state.opcao5}
                             ref={(input) => { this.opcao5 = input }}
                             onChange={e => this.setState({ opcao5: e.target.value })} />
-                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
-                    <button className="btn btn-light" onClick={() => this.props.history.replace('/avisos-list')}>
+                    <button className="btn btn-light" onClick={() => this.props.history.replace('/enquetes-list')}>
                         Cancelar
                     </button>
                     <button className="btn btn-primary" onClick={() => this.incluirEnquete()}>

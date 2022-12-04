@@ -9,7 +9,6 @@ class IncluirAviso extends React.Component {
     constructor(props){
         super(props)
 
-        // State iniciado com atributos do post vazios
         this.state = {
             id_aviso: null,
             titulo : '',
@@ -19,19 +18,20 @@ class IncluirAviso extends React.Component {
 
     }
 
-    // Função executada assim que o componente carrega
     componentDidMount(){
-    
-        // Verificando se id foi passado nos parâmetros da url
-        if(this.props?.match?.params?.id_aviso){
-            console.log();
-            let avisoId = this.props.match.params.id_aviso
-            console.log(avisoId);
-            this.getAviso(avisoId)
+        let userData = authService.getLoggedUser();
+        if(userData && userData[0].tipo === 'Sindico'){
+            if(this.props?.match?.params?.id_aviso){
+                console.log();
+                let avisoId = this.props.match.params.id_aviso
+                console.log(avisoId);
+                this.getAviso(avisoId)
+            }  
+        }else{                                     
+            this.props.history.replace('/erro')
         }
     }
 
-    // Função que recupera os dados do post caso seja uma edição
     async getAviso(avisoId){
         try {
             let res = await avisosService.getOne(avisoId)
@@ -43,10 +43,8 @@ class IncluirAviso extends React.Component {
         }
     }
 
-    // Função responsável por salvar o post
-    async sendPost(){
+    async incluirAviso(){
         
-        // Reunindo dados
         let data = {
             titulo : this.state.titulo,
             descricao : this.state.descricao,
@@ -63,17 +61,8 @@ class IncluirAviso extends React.Component {
             return;
             }
         try {
-            // Caso seja uma edição, chamar o "edit" do serviço
-            if(this.state.id_aviso){
-                await avisosService.edit(data, this.state.id_aviso)
-                alert("Aviso editado com sucesso!")
-            }
-            // Caso seja uma adição, chamar o "create" do serviço
-            else{
-                await avisosService.create(data)
-                alert("Aviso criado com sucesso!")
-            }
-            this.props.history.push('/avisos-list')
+            let res = await avisosService.incluirAviso(data)
+            this.props.history.push('/alterar-aviso/'+res.data[0].id_aviso)
         } catch (error) {
             console.log(error)
             
@@ -104,7 +93,6 @@ class IncluirAviso extends React.Component {
                             value={this.state.titulo}
                             ref={(input) => { this.titulo = input }}
                             onChange={e => this.setState({ titulo: e.target.value })} />
-                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
                     <div className="form-group">
                         <label htmlFor="title">Descrição</label>
@@ -115,13 +103,10 @@ class IncluirAviso extends React.Component {
                             value={this.state.descricao}
                             ref={(input) => { this.descricao = input }}
                             onChange={e => this.setState({ descricao: e.target.value })} />
-                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
-                    <button className="btn btn-light" onClick={() => this.props.history.replace('/avisos-list')}>
-                        Cancelar
-                    </button>
-                    <button className="btn btn-primary" onClick={() => this.sendPost()}>
-                        Salvar
+                    
+                    <button className="btn btn-primary" onClick={() => this.incluirAviso()}>
+                        Incluir
                     </button>
                 </form>
             </div>

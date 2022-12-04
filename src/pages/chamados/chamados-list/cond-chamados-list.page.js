@@ -3,6 +3,7 @@ import { Link, Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import chamadosService from '../../../services/chamados.service';
+import { Table } from 'semantic-ui-react'
 
 class CondChamadosListPage extends React.Component {
 
@@ -23,8 +24,7 @@ class CondChamadosListPage extends React.Component {
     componentDidMount() {
         let userData = authService.getLoggedUser();
         if(userData && userData[0].tipo === 'Condomino'){
-            console.log(userData[0].id_usuario)
-            this.consultarChamados(userData.id_usuario)
+            this.consultarChamados(userData[0].id_usuario)
         }else{
             
             this.props.history.replace('/')
@@ -38,7 +38,8 @@ class CondChamadosListPage extends React.Component {
     async consultarChamados(id_usuario) {
         this.setState({aberto: true, emAndamento:false, finalizado:false})
         try {
-            
+            console.log("TESTE");
+
             let res = await chamadosService.consultarChamadoUsuario(id_usuario)
             console.log(res);
             this.setState({ chamados: res.data})
@@ -65,44 +66,38 @@ class CondChamadosListPage extends React.Component {
                     </button>
                 </PageTop>
                 
-                    <div>
-                        <table className='styled-table'>
-                <thead>
-                               <tr>
-                                <th>ID</th>
-                                <th>Título</th>
-                                <th>Situação</th>
-                                <th>Data de emissão</th>
-                                </tr>
-                                </thead>
-                                </table>
+                   
+                    
+                <><Table fixed>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell>ID</Table.HeaderCell>
+                                <Table.HeaderCell>Título</Table.HeaderCell>
+                                <Table.HeaderCell>Situação</Table.HeaderCell>
+                                <Table.HeaderCell>Data emissão</Table.HeaderCell>
 
-                {/* Percorrendo o array de posts do state e renderizando cada um
-                dentro de um link que leva para a página de detalhes do post específico */}
-                {this.state.chamados && this.state.chamados.map(chamados => (
-                
-              
-               
-                
-                <table  className="styled-table" >
-                    <tr >
-                    <Link to={"consultar-chamado/" + chamados.id_chamado} key={chamados.id_chamado}>
-                    <td>{chamados.id_chamado}</td>
-                    </Link>
-                           
-                    <td>{chamados.titulo}</td>
-                    <td>{chamados.situacao}</td>
-                    <td>{chamados.data_emissao}</td>
-                    </tr>
-                </table>
-            
-                 
+                            </Table.Row>
+                        </Table.Header>
+                </Table></>
+              {this.state.chamados.map(chamados => (
+                    <><Table fixed>  
+                        <Table.Body>
+                            <Table.Row>
+                            <Link to={"/consultar-chamado/" + chamados.id_chamado} key={chamados.id_chamado}>
+
+                                <Table.Cell>{chamados.id_chamado}</Table.Cell>
+                                </Link>
+                                <Table.Cell>{chamados.titulo}</Table.Cell>
+                                <Table.Cell>{chamados.situacao}</Table.Cell>
+                                <Table.Cell>{chamados.data_emissao}</Table.Cell>
+                            </Table.Row>
+                        </Table.Body>
+                    </Table></>
+                               
+                     
                 ))}
              </div>
-                
-            
-        
-            </div>
+           
         )
     }
 
