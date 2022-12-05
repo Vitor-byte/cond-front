@@ -23,16 +23,14 @@ class CancelarReserva extends React.Component {
                 this.consultarReserva(reservaId)
             }  
         }else{                                     
-            this.props.history.replace('/erro')
+            this.setState({ redirectTo: "/login"})                                        
         }
-            const reservaId = this.props.match.params.id_reserva
-            console.log(reservaId);
-            this.consultarReserva(reservaId)
+           
     }
 
     async consultarReserva(reservaId) {
         
-
+        try{
             let res = await areasService.consutarReserva(reservaId)
             console.log(res);
             this.setState({ reserva: res.data[0]})
@@ -40,6 +38,10 @@ class CancelarReserva extends React.Component {
                 this.setState({ situacao: true})            
             }
             console.log(res);
+        }catch(error){
+            this.setState({ redirectTo: "/erro"})                                        
+
+        }
         
     }
 
@@ -80,7 +82,7 @@ class CancelarReserva extends React.Component {
                             <p>{this.state.reserva?.id_reserva}</p>
                         </div>
                         <div className="post-info">
-                            <h4>Nome</h4>
+                            <h4>Área</h4>
                             <p>{this.state.reserva?.nome}</p>
                         </div>
                         <div className="post-info">
@@ -89,7 +91,7 @@ class CancelarReserva extends React.Component {
                         </div>
                         <div className="post-info">
                             <h4>Horário</h4>
-                            <p>{this.state.reserva?.horario_inicial+"-"+this.state.reserva?.horario_final}</p>
+                            <p>{this.state.reserva?.horario_inicial+this.state.reserva?.horario_final}</p>
                         </div>
                         <div className="post-info">
                             <h4>Situação</h4>

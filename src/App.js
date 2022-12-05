@@ -159,7 +159,7 @@ class App extends React.Component {
           <Route path="/consultar-area/:id_area_comum" component={ConsultarArea} />
           <Route path="/reservar-area/:id_area_comum" component={ReservarArea} />
           <Route path="/reservas-list" component={ReservasListPage} />
-          <Route path="/cancelar-reserva/:id_reserva" component={CancelarReserva} />
+          <Route path="/consultar-reserva/:id_reserva" component={CancelarReserva} />
 
           <Route path="/enquetes-list" component={EnquetesListPage} />
           <Route path="/cond-enquetes-list" component={CondEnquetesListPage} />

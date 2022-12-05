@@ -13,7 +13,7 @@ class ErrorPage extends React.Component {
     }   
 
     componentDidMount(){
-
+        this.render()
     }
     render() {
         if(this.state.redirectTo){

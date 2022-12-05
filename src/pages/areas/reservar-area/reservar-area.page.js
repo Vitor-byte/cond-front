@@ -73,7 +73,7 @@ class ReservarArea extends React.Component {
         try{
       
             let res = await areasService.reservarArea(data)
-            this.props.history.push('/cancelar-reserva/'+res.data[0].id_reserva)
+            this.props.history.push('/consultar-reserva/'+res.data[0].id_reserva)
             console.log(res);
         } catch (error) {
             console.log(error.response.data);

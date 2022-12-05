@@ -13,13 +13,11 @@ class CondominosListPage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            // Atributo para armazenar o array de posts vindos da API.
             condominos: [],
             redirectTo: null
         }
     }
 
-    // Função que é executada assim que o componente carrega.
     componentDidMount() {
       
         let userData = authService.getLoggedUser();
@@ -32,7 +30,6 @@ class CondominosListPage extends React.Component {
         }
     
     }
-    // Função responsável por chamar o serviço e carregar os posts.
     async getCondominos() {
         try {
             let res = await condominosService.list()
@@ -54,20 +51,15 @@ class CondominosListPage extends React.Component {
         return (
             <div className="container">
 
-                <PageTop title={"Condominos"} desc={"Listagem dos condominos"}>
+                <PageTop title={"Condôminos"}>
                     <button className="button" onClick={() => this.props.history.push('/incluir-condomino')}>
                         Novo Condômino
                     </button>
                 </PageTop>
                 
 
-                {/* Percorrendo o array de posts do state e renderizando cada um
-                dentro de um link que leva para a página de detalhes do post específico */}
-                {
-                
-                
-                
-                this.state.condominos.map(condominos => (
+            
+                {this.state.condominos.map(condominos => (
                     <><Table fixed>
                         <Table.Header>
                             <Table.Row>

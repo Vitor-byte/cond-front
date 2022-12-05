@@ -56,29 +56,29 @@ class ReservaList extends React.Component {
 
             <PageTop title={"Minhas reservas"}>
             </PageTop>
-            
-            {
-            this.state.reservas.map(reservas => (
-                <><Table fixed>
+            <>  <Table fixed>
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>ID</Table.HeaderCell>
-                            <Table.HeaderCell>Nome</Table.HeaderCell>
-                            <Table.HeaderCell>Data</Table.HeaderCell>
-                            <Table.HeaderCell>Horário</Table.HeaderCell>
+                            <Table.HeaderCell>Área</Table.HeaderCell>
+                            <Table.HeaderCell>Situação</Table.HeaderCell>
+                            <Table.HeaderCell>Preço</Table.HeaderCell>
 
                         </Table.Row>
                     </Table.Header>
-
+                </Table></>
+            {
+            this.state.reservas.map(reservas => (
+                <><Table fixed>
                     <Table.Body>
                         <Table.Row>
-                        <Link to={"/cancelar-reserva/" + reservas.id_reserva} key={reservas.id_reserva}>
+                        <Link to={"/consultar-reserva/" + reservas.id_reserva} key={reservas.id_reserva}>
 
                             <Table.Cell>{reservas.id_reserva}</Table.Cell>
                             </Link>
                             <Table.Cell>{reservas.nome}</Table.Cell>
-                            <Table.Cell>{reservas.data}</Table.Cell>
-                            <Table.Cell>{reservas.horario_inicial+"-"+reservas.horario_final}</Table.Cell>
+                            <Table.Cell>{reservas.situacao}</Table.Cell>
+                            <Table.Cell>{reservas.preco}</Table.Cell>
                             
                         </Table.Row>
 
