@@ -19,6 +19,7 @@ import ChamadosListPage from './pages/chamados/chamados-list/chamados-list.page'
 import IncluirChamado from './pages/chamados/incluir-chamado/incluir-chamado.page';
 import ChamadosDetailPage from './pages/chamados/consultar-chamado/consultar-chamado.page';
 import ConsultarChamado from './pages/chamados/consultar-chamado/consultar-chamado.page';
+import CondConsultarChamado from './pages/chamados/consultar-chamado/cond-consultar-chamado.page';
 
 
 
@@ -109,10 +110,10 @@ class App extends React.Component {
                    <div className="collapse navbar-collapse" id="navbarMenu">
                    <div className="navbar-nav">
                      <Link to="/" className="nav-item nav-link">Home</Link>
-                     <Link to="/condominos-list" className="nav-item nav-link">Condôminos</Link>
+                     <Link to="/areas-list" className="nav-item nav-link">Áreas</Link>
                      <Link to="/avisos-list" className="nav-item nav-link">Avisos</Link>
                      <Link to="/chamados-list" className="nav-item nav-link">Chamados</Link>
-                     <Link to="/areas-list" className="nav-item nav-link">Areas</Link>
+                     <Link to="/condominos-list" className="nav-item nav-link">Condôminos</Link>
                      <Link to="/enquetes-list" className="nav-item nav-link">Enquetes</Link>
         
                   </div>
@@ -147,6 +148,8 @@ class App extends React.Component {
           <Route path="/incluir-chamado" component={IncluirChamado} />
           <Route path="/atender-chamado/:id_chamado" component={AtenderChamado} />
           <Route path="/consultar-chamado/:id_chamado" component={ConsultarChamado} />
+          <Route path="/cond-consultar-chamado/:id_chamado" component={CondConsultarChamado} />
+
           <Route path="/cond-chamados-list" component={CondChamadosListPage} />
 
           <Route path="/cond-areas-list" component={CondAreasList} />

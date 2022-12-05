@@ -22,12 +22,15 @@ class AtenderChamado extends React.Component {
 
     // Função que é executada assim que o componente carrega
     componentDidMount() {
-        
-            // Recuperando os id na url
-            const chamadoId = this.props.match.params.id_chamado
-            // Chamando a função que carrega os dados 
-            console.log(chamadoId);
-            this.consultarChamado(chamadoId)
+        let userData = authService.getLoggedUser();
+        if(userData && userData[0].tipo === 'Sindico'){
+            if(this.props?.match?.params?.id_chamado){
+                let chamadoId = this.props.match.params.id_chamado
+                this.consultarChamado(chamadoId)
+            }  
+        }else{                                     
+            this.props.history.replace('/erro')
+        }
     }
 
     // Função que carrega os dados do post e salva no state
@@ -35,10 +38,12 @@ class AtenderChamado extends React.Component {
         
             let res = await chamadosService.consultarChamado(chamadoId)
             this.setState({ chamado: res.data[0] })
+            console.log(res)
+
             let res2 = await chamadosService.consultarChamadoResposta(chamadoId)
             this.setState({ resposta: res2.data[0] })
             console.log(res2)
-            if(this.state.chamado.situacao ==="Em andamento"){
+            if(this.state.chamado?.situacao ==="Em andamento"){
                 this.setState({ andamento: true })
             }else{
                 this.setState({ aberto: true })
@@ -49,21 +54,29 @@ class AtenderChamado extends React.Component {
     }
 
     async atenderChamado(chamadoId) {
-        console.log(this.state.respostaInicial)
         let data = {
             situacao : "Em andamento",
             tipo:this.state.tipo,
             resposta: this.state.novaResposta
         }
-    
-            await chamadosService.atenderChamado(data, chamadoId)
-            this.props.history.push('/chamados-list')
+        if(!data.resposta || data.resposta === ''){
+            this.novaResposta.focus()        
+            return;
+        }
+
+        await chamadosService.atenderChamado(data, chamadoId)
+        this.props.history.push('/chamados-list')
     }
     async finalizarChamado(chamadoId) {
         let data = {
             situacao : "Finalizado",
             resposta: this.state.novaResposta
         }
+        if(!data.resposta || data.resposta === ''){
+            this.novaResposta.focus()        
+            return;
+        }
+
         await chamadosService.atenderChamado(data, chamadoId)
         this.props.history.push('/chamados-list')
     }
@@ -78,7 +91,7 @@ class AtenderChamado extends React.Component {
         return (
             <div className="container">
 
-                <PageTop title={"Chamado"} desc={"Cadastro do chamado"}>
+                <PageTop title={"Chamado"} >
                     <button className="btn btn-light" onClick={() => this.props.history.goBack()}>
                         Cancelar
                     </button>
@@ -92,8 +105,8 @@ class AtenderChamado extends React.Component {
                             <p>{this.state.chamado?.id_chamado}</p>
                         </div>
                         <div className="post-info">
-                            <h4>Usuário</h4>
-                            <p>{this.state.chamado?.data_emissao}</p>
+                            <h4>Condômino</h4>
+                            <p>{this.state.chamado?.nome}</p>
                         </div>
                         <div className="post-info">
                             <h4>Data emissão</h4>
@@ -110,6 +123,10 @@ class AtenderChamado extends React.Component {
                         <div className="post-info">
                             <h4>Situação</h4>
                             <p>{this.state.chamado?.situacao}</p>
+                        </div>
+                        <div className="post-info">
+                            <h4>Tipo</h4>
+                            <p>{this.state.chamado?.tipo}</p>
                         </div>
                         {this.state.andamento && <div className="post-info">
                             <h4>Resposta</h4>

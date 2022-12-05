@@ -4,26 +4,27 @@ import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import areasService from '../../../services/areas.service';
 import './areas-list.page.css';
+import { Table } from 'semantic-ui-react'
 
 class CondAreasList extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            // Atributo para armazenar o array de posts vindos da API.
             areas: [],
             redirectTo: null
         }
     }
 
-    // Função que é executada assim que o componente carrega.
     componentDidMount() {
-    
-            this.getAreas()
-
+        let userData = authService.getLoggedUser();
+        if(userData && userData[0].tipo === 'Condomino'){
+            this.getAreas()  
+        }else{                                     
+            this.props.history.replace('/erro')
+        }
     }
 
-    // Função responsável por chamar o serviço e carregar os posts.
     async getAreas() {
         try {
             let res = await areasService.list()
@@ -31,7 +32,7 @@ class CondAreasList extends React.Component {
             this.setState({ areas: res.data})
         } catch (error) {
             console.log(error);
-            alert("Não foi possível listar os condômino.")
+            alert("Não foi possível listar.")
         }
     }
 
@@ -46,40 +47,39 @@ class CondAreasList extends React.Component {
         return (
             <div className="container">
 
-                <PageTop title={"Áreas"} desc={"Listagem das áreas"}>
+                <PageTop title={"Áreas"}>
                    
                 </PageTop>
 
-                <table className='styled-table'>
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Nome</th>
-                            <th>Preço</th>
-                            <th>Situação</th>
-                        </tr>
-                    </thead>
-                </table>
-                {/* Percorrendo o array de posts do state e renderizando cada um
-                dentro de um link que leva para a página de detalhes do post específico */}
-                {this.state.areas.map(areas => (
-                  <div >
-                
-                  <table  className="styled-table" >
-                      <tr className='styled-table thead'>
-                      <Link to={"/consultar-area/" + areas.id_area_comum} key={areas.id_area_comum}>
-                      <td>{areas.id_area_comum}</td>
-                      </Link>
-                             
-                      <td>{areas.nome}</td>
-                      <td>{areas.preco}</td>
-                      <td>{areas.situacao}</td>
-                      </tr>
-                  </table>
-                             
-                  </div>
-                ))}
+                <><Table fixed>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell>ID</Table.HeaderCell>
+                                <Table.HeaderCell>Nome</Table.HeaderCell>
+                                <Table.HeaderCell>Situação</Table.HeaderCell>
+                                <Table.HeaderCell>Preço</Table.HeaderCell>
 
+                            </Table.Row>
+                        </Table.Header>
+                </Table></>
+              {this.state.areas.map(areas => (
+                    <><Table fixed>  
+                        <Table.Body>
+                            <Table.Row>
+                            <Link to={"/consultar-area/" + areas.id_area_comum} key={areas.id_area_comum}>
+
+                                <Table.Cell>{areas.id_area_comum}</Table.Cell>
+                                </Link>
+                                <Table.Cell>{areas.nome}</Table.Cell>
+                                <Table.Cell>{areas.situacao}</Table.Cell>
+                                <Table.Cell>{areas.preco}</Table.Cell>
+
+                            </Table.Row>
+                        </Table.Body>
+                    </Table></>
+                               
+                     
+                ))}
             </div>
         )
     }

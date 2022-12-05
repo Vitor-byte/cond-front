@@ -9,9 +9,8 @@ class AlterarArea extends React.Component {
     constructor(props){
         super(props)
 
-        // State iniciado com atributos do post vazios
         this.state = {
-            id_area_comum: null,
+            id_area_comum: '',
             nome : '',
             descricao : '',
             preco:'',
@@ -21,19 +20,19 @@ class AlterarArea extends React.Component {
 
     }
 
-    // Função executada assim que o componente carrega
     componentDidMount(){
-    
-        // Verificando se id foi passado nos parâmetros da url
-        if(this.props?.match?.params?.id_area_comum){
-            console.log();
-            let areaId = this.props.match.params.id_area_comum
-            console.log(areaId);
-            this.getArea(areaId)
+        let userData = authService.getLoggedUser();
+        if(userData && userData[0].tipo === 'Sindico'){
+            if(this.props?.match?.params?.id_area_comum){
+                let areaId = this.props.match.params.id_area_comum
+                this.setState({id_area_comum: areaId})
+                this.getArea(areaId)
+            }  
+        }else{                                     
+            this.props.history.replace('/erro')
         }
     }
 
-    // Função que recupera os dados do post caso seja uma edição
     async getArea(areaId){
         try {
             let res = await areasService.getOne(areaId)
@@ -41,14 +40,11 @@ class AlterarArea extends React.Component {
             this.setState(area)
         } catch (error) {
             console.log(error);
-            alert("Não foi possível carregar post.")
         }
     }
 
-    // Função responsável por salvar o post
     async enviarArea(){
         console.log("entrou")
-        // Reunindo dados
         let data = {
             nome : this.state.nome,
             descricao : this.state.descricao,
@@ -76,21 +72,14 @@ class AlterarArea extends React.Component {
           }
        
         try {
-            // Caso seja uma edição, chamar o "edit" do serviço
-            if(this.state.id_area_comum){
-                await areasService.edit(data, this.state.id_area_comum)
-                alert("Área editado com sucesso!")
-            }
-            // Caso seja uma adição, chamar o "create" do serviço
-            else{
-                await areasService.create(data)
-                alert("Área criado com sucesso!")
-            }
-            this.props.history.push('/areas-list')
+           
+            await areasService.alterarArea(data, this.state.id_area_comum)
         } catch (error) {
             console.log(error)
             
         }
+        window.location.reload();
+
     }
 
     render() {
@@ -101,19 +90,10 @@ class AlterarArea extends React.Component {
             )
         }
 
-        let title = this.state.id_area_comum ? 'Editar Área' : 'Nova Área';
-        let desc = this.state.id_area_comum ? 'Editar informações de uma área' : 'Formulário de criação de área';
-
         return (
             <div className="container">
 
-                <PageTop title={title} desc={desc}>
-                    <button className="btn btn-light" onClick={() => this.props.history.replace('/areas-list')}>
-                        Cancelar
-                    </button>
-                    <button className="btn btn-primary" onClick={() => this.enviarArea()}>
-                        Salvar
-                    </button>
+                <PageTop title="Área">
                 </PageTop>
 
                 <form onSubmit={e => e.preventDefault()}>
@@ -126,7 +106,6 @@ class AlterarArea extends React.Component {
                             value={this.state.nome}
                             ref={(input) => { this.nome = input }}
                             onChange={e => this.setState({ nome: e.target.value })} />
-                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
                     <div className="form-group">
                         <label htmlFor="title">Descrição</label>
@@ -136,9 +115,7 @@ class AlterarArea extends React.Component {
                             id="title"
                             value={this.state.descricao}
                             ref={(input) => { this.descricao = input }}
-                            onChange={e => this.setState({ descricao: e.target.value })} />
-                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
-                        
+                            onChange={e => this.setState({ descricao: e.target.value })} />                        
                     </div>
                     <div className="form-group">
                         <label htmlFor="title">Preço</label>
@@ -148,9 +125,7 @@ class AlterarArea extends React.Component {
                             id="title"
                             value={this.state.preco}
                             ref={(input) => { this.preco = input }}
-                            onChange={e => this.setState({ preco: e.target.value })} />
-                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
-                        
+                            onChange={e => this.setState({ preco: e.target.value })} />                        
                     </div>
                     <div className="form-group">
                     <label htmlFor="inadimplente">Situação</label>
@@ -165,6 +140,9 @@ class AlterarArea extends React.Component {
                         </select>
                     </div>
                 </form>
+                    <button className="btn btn-primary" onClick={() => this.enviarArea()}>
+                        Salvar
+                    </button>
             </div>
         )
     }

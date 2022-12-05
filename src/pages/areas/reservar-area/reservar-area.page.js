@@ -9,7 +9,7 @@ class ReservarArea extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            // Atributo para armazenar os dados do post]
+            id_usuario:"",
             opcao:"",
             data:"",
             horarios: [],
@@ -18,23 +18,30 @@ class ReservarArea extends React.Component {
         }
     }
 
-    // Função que é executada assim que o componente carrega
     componentDidMount() {
-        
-            // Recuperando os id do post na url
-            const areaId = this.props.match.params.id_area_comum
-            // Chamando a função que carrega os dados do post
-            console.log(areaId);
-            this.getArea(areaId)
+           
+        let userData = authService.getLoggedUser();
+        if(userData && userData[0].tipo === 'Condomino'){
+            if(this.props?.match?.params?.id_area_comum){
+                this.setState({ id_usuario: userData[0].id_usuario})
+                let areaId = this.props.match.params.id_area_comum
+                this.getArea(areaId)
+            }  
+        }else{                                     
+            this.props.history.replace('/erro')
+        }
     }
 
-    // Função que carrega os dados do post e salva no state
     async getArea(areasId) {
         
             let res = await areasService.getOne(areasId)
             console.log(res);
             this.setState({ areas: res.data[0] })
             console.log(this.areas);
+            if(res.data[0].situacao === "Fechada"){
+                this.props.history.replace('/erro')
+            }    
+       
         
     }
 
@@ -45,38 +52,33 @@ class ReservarArea extends React.Component {
         return
        }
         try{
-      
             let res = await areasService.consultarHorarios( data)
-    
             this.setState({ horarios: res.data})
             console.log(this.state.horarios);
         } catch (error) {
             console.log(error.response.data);
-            alert("Não foi possível carregar post.")
         }
     }
     async reservarArea() {
         let data = {
-            id_usuario:"18", 
+            id_usuario:this.state.id_usuario , 
             id_area_comum:this.state.areas.id_area_comum, 
             data: this.state.data,
             horario_inicial: this.state.opcao.substring(0,8), 
             horario_final: this.state.opcao.substring(9,17)
         
         }
-        console.log(data.horario_final)
+        console.log(data)
         console.log(data.horario_inicial)
         try{
       
             let res = await areasService.reservarArea(data)
-    
+            this.props.history.push('/cancelar-reserva/'+res.data[0].id_reserva)
             console.log(res);
         } catch (error) {
             console.log(error.response.data);
-            alert("Não foi possível carregar post.")
         }
 
-    
     }
     render() {
 
@@ -89,7 +91,7 @@ class ReservarArea extends React.Component {
         return (
             <div className="container">
 
-                <PageTop title={"Areas"} desc={"cadastro de area"}>
+                <PageTop title={"Área"}>
                     <button className="btn btn-light" onClick={() => this.props.history.goBack()}>
                         Voltar
                     </button>

@@ -55,7 +55,6 @@ class AlterarEnquete extends React.Component {
             this.setState(enquete)
         } catch (error) {
             console.log(error);
-            alert("Não foi possível carregar aviso.")
         }
         window.location.reload();
 
@@ -69,7 +68,6 @@ class AlterarEnquete extends React.Component {
 
         } catch (error) {
             console.log(error);
-            alert("Não foi possível carregar aviso.")
         }
         window.location.reload();
 

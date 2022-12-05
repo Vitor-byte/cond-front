@@ -22,9 +22,16 @@ class ChamadosListPage extends React.Component {
 
     // Função que é executada assim que o componente carrega.
     componentDidMount() {
-    
+        let userData = authService.getLoggedUser();
+        if(userData && userData[0].tipo === 'Sindico'){
             this.chamadoAbertos()
 
+        }else{
+            
+            this.props.history.replace('/')
+
+            
+        }
     }
 
     async chamadoAbertos() {

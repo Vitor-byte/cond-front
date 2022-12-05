@@ -83,7 +83,7 @@ class CondChamadosListPage extends React.Component {
                     <><Table fixed>  
                         <Table.Body>
                             <Table.Row>
-                            <Link to={"/consultar-chamado/" + chamados.id_chamado} key={chamados.id_chamado}>
+                            <Link to={"/cond-consultar-chamado/" + chamados.id_chamado} key={chamados.id_chamado}>
 
                                 <Table.Cell>{chamados.id_chamado}</Table.Cell>
                                 </Link>

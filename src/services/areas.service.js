@@ -43,7 +43,7 @@ const areasService = {
     },
 
     // Função para editar um post específico
-    async edit(data, areaId){
+    async alterarArea(data, areaId){
         const enpoint = apiUrl + "/area/" + areaId
         return axios.patch(enpoint, data)
     },

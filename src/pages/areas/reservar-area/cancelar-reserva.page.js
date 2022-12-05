@@ -15,15 +15,21 @@ class CancelarReserva extends React.Component {
         }
     }
 
-    // Função que é executada assim que o componente carrega
     componentDidMount() {
+        let userData = authService.getLoggedUser();
+        if(userData && userData[0].tipo === 'Condomino'){
+            if(this.props?.match?.params?.id_reserva){
+                let reservaId = this.props.match.params.id_reserva
+                this.consultarReserva(reservaId)
+            }  
+        }else{                                     
+            this.props.history.replace('/erro')
+        }
             const reservaId = this.props.match.params.id_reserva
-            // Chamando a função que carrega os dados do post
             console.log(reservaId);
             this.consultarReserva(reservaId)
     }
 
-    // Função que carrega os dados do post e salva no state
     async consultarReserva(reservaId) {
         
 
@@ -37,14 +43,10 @@ class CancelarReserva extends React.Component {
         
     }
 
-    // Função que exclui o post, chamada ao clicar no botão "Excluir"
     async cancelarReserva(reservaId) {
-        
-        if (!window.confirm("Deseja realmente excluir este aviso?")) return;
-
         try {
             let res = await areasService.cancelarReserva(reservaId)
-            console.log(res);
+            window.location.reload();
 
         } catch (error) {
             console.log(error.response.data);

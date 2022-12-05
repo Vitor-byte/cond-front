@@ -54,7 +54,7 @@ class incluirChamado extends React.Component {
         }
         try {
             let res = await chamadosService.incluirChamado(data)
-            this.props.history.push('/consultar-chamado/'+ res.data[0].id_chamado)
+            this.props.history.push('/cond-consultar-chamado/'+ res.data[0].id_chamado)
 
         } catch (error) {
             console.log(error);

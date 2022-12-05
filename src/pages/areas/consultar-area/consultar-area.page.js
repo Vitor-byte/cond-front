@@ -9,49 +9,36 @@ class ConsultarArea extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-
+            situacao: false,
             horario: false,
-            // Atributo para armazenar os dados do post
             areas: null,
             redirectTo: null
         }
     }
 
-    // Função que é executada assim que o componente carrega
     componentDidMount() {
-        
-            // Recuperando os id do post na url
-            const areaId = this.props.match.params.id_area_comum
-            // Chamando a função que carrega os dados do post
-            console.log(areaId);
-            this.getArea(areaId)
-    }
-
-    // Função que carrega os dados do post e salva no state
-    async getArea(areasId) {
-        
-            let res = await areasService.getOne(areasId)
-            console.log(res);
-            this.setState({ areas: res.data[0] })
-            console.log(this.areas);
-        
-    }
-
-    // Função que exclui o post, chamada ao clicar no botão "Excluir"
-    async deletePost(areasId) {
-        
-        if (!window.confirm("Deseja realmente excluir este aviso?")) return;
-
-        try {
-            await areasService.delete(areasId)
-            alert("Aviso excluído com sucesso")
-            this.props.history.replace('/areas-list')
-        } catch (error) {
-            console.log(error);
-            alert("Não foi excluir o aviso.")
+        let userData = authService.getLoggedUser();
+        if(userData && userData[0].tipo === 'Condomino'){
+            if(this.props?.match?.params?.id_area_comum){
+                let areaId = this.props.match.params.id_area_comum
+                this.getArea(areaId)
+            }  
+        }else{                                     
+            this.props.history.replace('/erro')
         }
-
     }
+
+    async getArea(areasId) {
+        let res = await areasService.getOne(areasId)
+        console.log(res);
+        this.setState({ areas: res.data[0] }) 
+        if(res.data[0].situacao === "Aberta"){
+            this.setState({ situacao: true })        
+        }    
+   
+    }
+
+    
 
     render() {
 
@@ -64,7 +51,7 @@ class ConsultarArea extends React.Component {
         return (
             <div className="container">
 
-                <PageTop title={"Areas"} desc={"cadastro de area"}>
+                <PageTop title={"Área"}>
                     <button className="btn btn-light" onClick={() => this.props.history.goBack()}>
                         Voltar
                     </button>
@@ -94,14 +81,14 @@ class ConsultarArea extends React.Component {
                             <p>{this.state.areas?.situacao}</p>
                         </div>
                         
-                        <div className="btn-group" role="group" aria-label="Basic example">
+                        {this.state.situacao && <div className="btn-group" role="group" aria-label="Basic example">
                             <button
                                 type="button"
                                 className="btn btn-sm btn-outline-primary"
                                 onClick={() => this.props.history.push('/reservar-area/' + this.state.areas.id_area_comum)}>
                                 Reservar
                             </button>
-                        </div>
+                        </div>}
                     </div>
 
                 </div>

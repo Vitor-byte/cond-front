@@ -16,15 +16,15 @@ class ReservaList extends React.Component {
             redirectTo: null
         }
     }
-
-    // Função que é executada assim que o componente carrega
     componentDidMount() {
         let userData = authService.getLoggedUser();
-        console.log(userData[0].id_usuario)
-        this.consultarReservas(userData.id_usuario)
+        if(userData && userData[0].tipo === 'Condomino'){
+            this.consultarReservas( userData[0].id_usuario)
+        }else{                                     
+            this.props.history.replace('/erro')
+        }
     }
 
-    // Função que exclui o post, chamada ao clicar no botão "Excluir"
     async consultarReservas(usuarioId) {
         
         console.log("teste");
@@ -54,12 +54,9 @@ class ReservaList extends React.Component {
         return (
             <div className="container">
 
-            <PageTop title={"Minhas reservas"} desc={"Listagem das reservas"}>
+            <PageTop title={"Minhas reservas"}>
             </PageTop>
             
-
-            {/* Percorrendo o array de posts do state e renderizando cada um
-            dentro de um link que leva para a página de detalhes do post específico */}
             {
             this.state.reservas.map(reservas => (
                 <><Table fixed>

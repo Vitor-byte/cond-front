@@ -4,7 +4,7 @@ import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import chamadosService from '../../../services/chamados.service';
 
-class ConsultarChamado extends React.Component {
+class CondConsultarChamado extends React.Component {
 
     constructor(props) {
         super(props)
@@ -18,8 +18,8 @@ class ConsultarChamado extends React.Component {
     // Função que é executada assim que o componente carrega
     componentDidMount() {
         let userData = authService.getLoggedUser();
-        console.log(userData)
-        if( userData && userData[0].tipo === 'Sindico'){
+        console.log(userData )
+        if( userData && userData[0].tipo === 'Condomino'){
             if(this.props?.match?.params?.id_chamado){
                 let chamadoId = this.props.match.params.id_chamado
                 this.consultarChamado(chamadoId)
@@ -68,10 +68,6 @@ class ConsultarChamado extends React.Component {
                             <p>{this.state.chamado?.id_chamado}</p>
                         </div>
                         <div className="post-info">
-                            <h4>Condômino</h4>
-                            <p>{this.state.chamado?.nome}</p>
-                        </div>
-                        <div className="post-info">
                             <h4>Título</h4>
                             <p>{this.state.chamado?.titulo}</p>
                         </div>
@@ -82,10 +78,6 @@ class ConsultarChamado extends React.Component {
                         <div className="post-info">
                             <h4>Situação</h4>
                             <p>{this.state.chamado?.situacao}</p>
-                        </div>
-                        <div className="post-info">
-                            <h4>Tipo</h4>
-                            <p>{this.state.chamado?.tipo}</p>
                         </div>
                         
                         <div className="post-info">
@@ -110,4 +102,4 @@ class ConsultarChamado extends React.Component {
 
 }
 
-export default ConsultarChamado
+export default CondConsultarChamado
