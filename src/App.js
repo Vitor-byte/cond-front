@@ -84,7 +84,7 @@ class App extends React.Component {
            <div>
             {(this.state.userData) ? (
                  <nav className="navbar navbar-expand-lg navbar-light bg-light"  >
-                 <Link to="/" className="navbar-brand">Condominio</Link>
+                 <Link to="/" className="navbar-brand">Condôminio</Link>
                  <button className="navbar-toggler"
                    type="button"
                    data-toggle="collapse"

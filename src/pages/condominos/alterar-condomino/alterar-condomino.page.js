@@ -54,15 +54,7 @@ class AlterarCondomino extends React.Component {
             this.setState({ redirectTo: "/error"})                                        
         }
     }
-    async consultarCondomino(condominoId){
-        try {
-            let res = await condominosService.getOne(condominoId)
-            let condomino = res.data[0]
-            this.setState(condomino)
-        } catch (error) {
-            this.setState({ redirectTo: "/error"})                                        
-        }
-    }
+    
     async enviarCondomino(){
         
         // Reunindo dados
@@ -249,7 +241,7 @@ class AlterarCondomino extends React.Component {
                 <button type="button" class="btn btn-primary"onClick={() => this.setState({ show: true })}>
                     Excluir
                     </button>
-                    <button type="button" class="btn btn-primary" onClick={() => this.state.enviarCondomino()}>
+                    <button type="button" class="btn btn-primary" onClick={() => this.enviarCondomino()}>
                     Salvar
                     </button>
                     <>

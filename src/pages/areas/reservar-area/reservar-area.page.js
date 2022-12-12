@@ -154,6 +154,8 @@ class ReservarArea extends React.Component {
                             </button>
                            
                         </div>
+
+                        
                         <h4>Horários disponíveis:</h4>
 
                         <form onSubmit={e => e.preventDefault()}>
@@ -186,7 +188,7 @@ class ReservarArea extends React.Component {
                             </Modal.Body>
                             <Modal.Footer>
                             <Button variant="secondary" onClick={() => this.setState({ show: false })}>
-                                Cancelar
+                                Fechar
                             </Button>
                             <Button variant="primary" onClick={() =>  this.reservarArea(this.state.opcao)}>Reservar</Button>
                             </Modal.Footer>

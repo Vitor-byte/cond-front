@@ -111,8 +111,8 @@ class incluirChamado extends React.Component {
                             onChange={e => this.setState({ tipo: e.target.value })}>
                         <option value="Selecione" selected>Selecione</option>
                         <option value="Reclamação">Reclamação</option>
-                        <option value="Reclamação">Reclamação</option>
-                        <option value="Reclamação">Reclamação</option>
+                        <option value="Dúvida">Dúvida</option>
+                        <option value="Sugetão">Reclamação</option>
                         <option value="Reclamação">Reclamação</option>
                         </select>
                     </div>
