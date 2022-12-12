@@ -20,17 +20,19 @@ class ConsultarAviso extends React.Component {
             const avisoId = this.props.match.params.id_aviso
             this.getAviso(avisoId)
         }else{                                     
-            this.props.history.replace('/erro')
+            this.setState({ redirectTo: "/login"})                                        
         }       
     }
 
     async getAviso(avisoId) {
-        
+            try{
             let res = await avisosService.getOne(avisoId)
             console.log(res);
             this.setState({ aviso: res.data[0] })
             console.log(this.aviso);
-        
+            }catch(error){
+                this.setState({ redirectTo: "/erro"})                                        
+            }
     }
 
     render() {
@@ -55,7 +57,7 @@ class ConsultarAviso extends React.Component {
                             <p>{this.state.aviso?.id_aviso}</p>
                         </div>
                         <div className="post-info">
-                            <h4>ID</h4>
+                            <h4>Data emissão</h4>
                             <p>{this.state.aviso?.data_emissao}</p>
                         </div>
                         <div className="post-info">

@@ -3,12 +3,14 @@ import { Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import areasService from '../../../services/areas.service';
+import './consultar-area.page.css';
 
 class ConsultarArea extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
+            inadimplente:true,
             situacao: false,
             horario: false,
             areas: null,
@@ -21,21 +23,32 @@ class ConsultarArea extends React.Component {
         if(userData && userData[0].tipo === 'Condomino'){
             if(this.props?.match?.params?.id_area_comum){
                 let areaId = this.props.match.params.id_area_comum
+                if(userData[0].inadimplente ==='Sim'){
+                    this.setState({ inadimplente: false})                                        
+
+                }
+
                 this.getArea(areaId)
             }  
         }else{                                     
-            this.props.history.replace('/erro')
+            this.setState({ redirectTo: "/login"})                                        
         }
     }
 
     async getArea(areasId) {
+        try{
+
+        
         let res = await areasService.getOne(areasId)
         console.log(res);
         this.setState({ areas: res.data[0] }) 
         if(res.data[0].situacao === "Aberta"){
             this.setState({ situacao: true })        
         }    
-   
+         }catch(error){
+            console.log(error.response.data);
+            this.setState({ redirectTo: "/erro"})                                        
+        }
     }
 
     
@@ -81,10 +94,10 @@ class ConsultarArea extends React.Component {
                             <p>{this.state.areas?.situacao}</p>
                         </div>
                         
-                        {this.state.situacao && <div className="btn-group" role="group" aria-label="Basic example">
+                        {(this.state.situacao && this.state.inadimplente)&& <div className="btn-group" role="group" aria-label="Basic example">
                             <button
                                 type="button"
-                                className="btn btn-sm btn-outline-primary"
+                                className="btn btn-primary"
                                 onClick={() => this.props.history.push('/reservar-area/' + this.state.areas.id_area_comum)}>
                                 Reservar
                             </button>

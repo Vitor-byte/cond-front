@@ -4,6 +4,7 @@ import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import chamadosService from '../../../services/chamados.service';
 import { Table } from 'semantic-ui-react'
+import './chamados-list.page.css';
 
 class ChamadosListPage extends React.Component {
 
@@ -25,12 +26,8 @@ class ChamadosListPage extends React.Component {
         let userData = authService.getLoggedUser();
         if(userData && userData[0].tipo === 'Sindico'){
             this.chamadoAbertos()
-
-        }else{
-            
-            this.props.history.replace('/')
-
-            
+        }else{  
+            this.setState({ redirectTo: "/login"})                                        
         }
     }
 
@@ -43,7 +40,7 @@ class ChamadosListPage extends React.Component {
             this.setState({ chamados: res.data})
         } catch (error) {
             console.log(error);
-            alert("Não foi possível listar os chamados.")
+            this.setState({ redirectTo: "/error"})                                        
         }
     }
     async chamadoEmAndamento() {
@@ -54,7 +51,7 @@ class ChamadosListPage extends React.Component {
             this.setState({ chamados: res.data})
         } catch (error) {
             console.log(error);
-            alert("Não foi possível listar os chamados.")
+            this.setState({ redirectTo: "/error"})                                        
         }
     }
     async chamadosFinalizados() {
@@ -67,7 +64,7 @@ class ChamadosListPage extends React.Component {
             this.setState({ chamados: res.data})
         } catch (error) {
             console.log(error);
-            alert("Não foi possível listar os chamados.")
+            this.setState({ redirectTo: "/error"})                                        
         }
     }
     render() {
@@ -83,20 +80,20 @@ class ChamadosListPage extends React.Component {
 
                 <PageTop title={"Chamados"}>
                 </PageTop>
-                <button className="btn chamado" onClick={() => this.chamadoAbertos()}>
+                <button className="btn-chamado" onClick={() => this.chamadoAbertos()}>
                         Aberto
                 </button>
-                <button className="btn chamado" onClick={() => this.chamadoEmAndamento()}>
+                <button className="btn-chamado" onClick={() => this.chamadoEmAndamento()}>
                         Em andamento
                 </button>
-                <button className="btn chamado" onClick={() => this.chamadosFinalizados()}>
+                <button className="btn-chamado" onClick={() => this.chamadosFinalizados()}>
                         Finalizado
                 </button> 
                 
                 {(this.state.aberto &&
                     <div>
-                       <Table fixed>
-                        <Table.Header>
+                       <Table fixed >
+                        <Table.Header >
                             <Table.Row>
                                 <Table.HeaderCell>ID</Table.HeaderCell>
                                 <Table.HeaderCell>Título</Table.HeaderCell>

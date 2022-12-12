@@ -1,7 +1,7 @@
 import './login.page.css';
 import React from "react";
 import authService from "../../services/auth.service";
-import { ReactComponent as Logo } from '../../assets/LogoLogin.svg';
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -49,14 +49,12 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div>
-      <div className='login'>
-       < div className='titulo'> <Logo/>
-             <h1 >   Condo Friendly</h1>
-             </div>
-            <form className='box'onSubmit={(e) => this.sendLogin(e)}>
+      <div className="content">
+        <div className="card">
+          <div className="card-body">
+            <form onSubmit={(e) => this.sendLogin(e)}>
               <div className="form-group">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email">E-mail</label>
                 <input
                   type="email"
                   className="form-control"
@@ -69,7 +67,7 @@ class Login extends React.Component {
               <div className="form-group">
                 <label htmlFor="senha">Senha</label>
                 <input
-                  type="password"
+                  type="senha"
                   className="form-control"
                   id="senha"
                   placeholder="Insira sua senha"
@@ -77,12 +75,13 @@ class Login extends React.Component {
                   onChange={(e) => this.setState({ senha: e.target.value })}
                 />
               </div>
-              <button type="submit" className="btn-login">
+              <button type="submit" className="btn btn-primary">
                 Entrar
               </button>
             </form>
           </div>
-          </div>
+        </div>
+      </div>
     );
   }
 }

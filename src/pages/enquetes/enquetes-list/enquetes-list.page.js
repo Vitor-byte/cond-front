@@ -22,7 +22,7 @@ class EnquetesListPage extends React.Component {
         if(userData && userData[0].tipo === 'Sindico'){
             this.consultarEnquetes()
         }else{                                     
-            this.props.history.replace('/erro')
+            this.setState({ redirectTo: "/login"})                                        
         }
     }
 
@@ -34,7 +34,7 @@ class EnquetesListPage extends React.Component {
             this.setState({ enquetes: res.data})
         } catch (error) {
             console.log(error);
-            alert("Não foi possível listar os condômino.")
+            this.setState({ redirectTo: "/erro"})                                        
         }
     }
 

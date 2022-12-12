@@ -3,7 +3,9 @@ import { Link, Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import areasService from '../../../services/areas.service';
-
+import './reservar-area.page.css';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 class CancelarReserva extends React.Component {
 
     constructor(props) {
@@ -11,6 +13,7 @@ class CancelarReserva extends React.Component {
         this.state = {
             situacao:false,
             reserva: "",
+            show:false,
             redirectTo: null
         }
     }
@@ -37,6 +40,7 @@ class CancelarReserva extends React.Component {
             if(this.state.reserva.situacao === "Reservada"){
                 this.setState({ situacao: true})            
             }
+            console.log(this.state.reserva.data.split('-').reverse().join('/'))
             console.log(res);
         }catch(error){
             this.setState({ redirectTo: "/erro"})                                        
@@ -52,7 +56,8 @@ class CancelarReserva extends React.Component {
 
         } catch (error) {
             console.log(error.response.data);
-   
+            this.setState({ redirectTo: "/erro"})                                        
+
         }
 
     }
@@ -69,9 +74,6 @@ class CancelarReserva extends React.Component {
             <div className="container">
 
                 <PageTop title={"Reserva"} >
-                    <button className="btn btn-light" onClick={() => this.props.history.goBack()}>
-                        Voltar
-                    </button>
                 </PageTop>
 
                 <div className="row">
@@ -101,11 +103,30 @@ class CancelarReserva extends React.Component {
                         {this.state.situacao && <div className="btn-group" role="group" aria-label="Basic example">
                             <button
                                 type="button"
-                                className="btn btn-sm btn-outline-primary"
-                                onClick={() => this.cancelarReserva(this.state.reserva?.id_reserva)}>
+                                className="btn btn-primary"
+                                onClick={() => this.setState({ show: true })}>
                                 Cancelar
                             </button>
                         </div>}
+                        <>
+
+                        <Modal
+                            show={this.state.show}
+                            backdrop="static"
+                            keyboard={false}
+                        >
+                            
+                            <Modal.Body>
+                            Deseja cancelar a reserva?
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <Button variant="secondary" onClick={() => this.setState({ show: false })}>
+                                Fechar
+                            </Button>
+                            <Button variant="primary"onClick={() => this.cancelarReserva(this.state.reserva?.id_reserva)}>Cancelar</Button>
+                            </Modal.Footer>
+                        </Modal>
+                    </>
                     </div>
 
                 </div>

@@ -7,6 +7,7 @@
 
 .nav-user__info{
   margin-right: 15px;
+
 }
 
 .nav-user__info h4{
@@ -20,6 +21,7 @@
   color: #666;
   font-size: 12px;
   margin: 0;
+  
 }
 .button{
 
@@ -32,3 +34,43 @@
     border-color: #003d36;
   
 }
+.bg-light{
+  background-color: #003d36;
+  border-color: #003d36;
+
+}
+.btn-primary{
+
+    cursor: pointer;
+    background-color: #003d36;
+    gap: 8;
+    color: rgb(255, 255, 255);
+    border-radius: 6px;
+    border-color: #003d36;
+    pointer-events: auto;
+    -webkit-box-shadow: none;
+          box-shadow: none;
+}
+.btn-primary:hover {
+  background-color:#003d36;
+  border-color: #003d36;
+  box-shadow: 0 0 0 0;
+  border: 0 none;
+  outline: 0;
+}
+
+a:visited {
+  color: #003d36;
+}
+a {
+  color: #003d36;
+}
+a:hover{
+  color: #003d36;
+
+}
+
+a:active {
+  color: rgb(94, 31, 78);
+}
+

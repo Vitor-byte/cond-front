@@ -3,7 +3,8 @@ import { Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import avisosService from '../../../services/avisos.service';
-
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 class AlterarAviso extends React.Component {
 
     constructor(props){
@@ -12,6 +13,7 @@ class AlterarAviso extends React.Component {
             id_aviso: '',
             titulo : '',
             descricao : '',
+            show:false,
             redirectTo: null
         }
 
@@ -25,7 +27,7 @@ class AlterarAviso extends React.Component {
                 this.getAviso(avisoId)
             }  
         }else{                                     
-            this.props.history.replace('/erro')
+            this.setState({ redirectTo: "/login"})                                        
         }
     }
 
@@ -36,6 +38,8 @@ class AlterarAviso extends React.Component {
             this.setState(aviso)
         } catch (error) {
             console.log(error);
+            this.setState({ redirectTo: "/erro"})                                        
+
         }
     }
     async alterarAviso(){
@@ -72,7 +76,8 @@ class AlterarAviso extends React.Component {
             this.props.history.push('/avisos-list')
         } catch (error) {
             console.log(error)
-            
+            this.setState({ redirectTo: "/erro"})                                        
+
         }
     }
     render() {
@@ -115,13 +120,34 @@ class AlterarAviso extends React.Component {
                     </div>
                     
                 </form>
-                
+                <button className="btn btn-primary" onClick={() => this.setState({ show: true })}>
+                        Excluir
+                    </button>
                     <button className="btn btn-primary" onClick={() => this.alterarAviso()}>
                         Salvar
                     </button>
-                    <button className="btn btn-primary" onClick={() => this.excluirAviso()}>
-                        Excluir
-                    </button>
+                    
+
+                    <>
+
+                    <Modal
+                        show={this.state.show}
+                        backdrop="static"
+                        keyboard={false}
+                    >
+                        
+                        <Modal.Body>
+                        Deseja excluir o aviso?
+                        </Modal.Body>
+                        <Modal.Footer>
+                        <Button variant="secondary" onClick={() => this.setState({ show: false })}>
+                            Fechar
+                        </Button>
+                        <Button variant="primary" onClick={() => this.excluirAviso()}>Excluir</Button>
+                        </Modal.Footer>
+                    </Modal>
+                    </>
+                    
             </div>
         )
     }

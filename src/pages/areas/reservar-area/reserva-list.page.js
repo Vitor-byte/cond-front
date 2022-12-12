@@ -21,7 +21,7 @@ class ReservaList extends React.Component {
         if(userData && userData[0].tipo === 'Condomino'){
             this.consultarReservas( userData[0].id_usuario)
         }else{                                     
-            this.props.history.replace('/erro')
+            this.setState({ redirectTo: "/login"})                                        
         }
     }
 
@@ -36,9 +36,7 @@ class ReservaList extends React.Component {
             this.setState({ reservas: res.data })
             console.log(res)
         } catch (error) {
-            
-            console.log(error.response.data);
-           
+            this.setState({ redirectTo: "/erro"})                                                   
         }
 
     }

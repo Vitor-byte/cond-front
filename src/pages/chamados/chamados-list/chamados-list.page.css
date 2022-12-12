@@ -1,7 +1,4 @@
-a:link {
-    text-decoration: none;
-    color: unset
-}
+
 
 .post-card{
     display: flex;
@@ -84,3 +81,35 @@ a:link {
     font-weight: bold;
     color: #009879;
 }
+
+.btn-chamado{
+    
+	color: rgb(0, 0, 0);
+	border-bottom-style:ridge;
+    box-shadow: none;	
+    border-color: white;
+    background-color: white;
+    height: 50px;
+    width: 370px;
+	font: bold15px arial,sans-serif;
+	text-shadow: none;
+    outline: none;
+    box-shadow: none;
+    outline-style: none;
+    border-top:none!important; 
+    border-left:none!important; 
+
+    border-right:none!important; 
+}
+.btn-chamado:focus {
+    outline: none;
+    box-shadow: none;
+        border-bottom-color: #003d36;
+        border-top:none!important; 
+        border-left:none!important; 
+
+        border-right:none!important; 
+
+  }
+ 
+ 

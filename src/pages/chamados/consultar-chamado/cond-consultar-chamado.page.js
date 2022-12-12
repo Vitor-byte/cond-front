@@ -3,7 +3,8 @@ import { Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import chamadosService from '../../../services/chamados.service';
-
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 class CondConsultarChamado extends React.Component {
 
     constructor(props) {
@@ -11,6 +12,8 @@ class CondConsultarChamado extends React.Component {
         this.state = {
             chamado: '',
             resposta:[],
+            situacao:false,
+            aberto:false,
             redirectTo: null
         }
     }
@@ -25,23 +28,42 @@ class CondConsultarChamado extends React.Component {
                 this.consultarChamado(chamadoId)
             }
         }else{
-            this.props.history.replace('/erro')
+            this.setState({ redirectTo: "/login"})                                        
         }
-    
-            const chamadoId = this.props.match.params.id_chamado
-            console.log(chamadoId);
-            this.consultarChamado(chamadoId)
     }
 
     async consultarChamado(chamadoId) {
-            let res = await chamadosService.consultarChamado(chamadoId)
-            let res2 = await chamadosService.consultarChamadoResposta(chamadoId)
-            console.log(res2);
-            this.setState({ chamado: res.data[0] })
-            this.setState({ resposta: res2.data })
-         
+        try{
+        let res = await chamadosService.consultarChamado(chamadoId)
+        let res2 = await chamadosService.consultarChamadoResposta(chamadoId)
+        console.log(res2);
+        this.setState({ chamado: res.data[0] })
+        this.setState({ resposta: res2.data})
 
         
+        if(this.state.chamado?.situacao ==='Em andamento' || this.state.chamado?.situacao ==='Finalizado'){
+            this.setState({ situacao:  true})
+        }
+        if(this.state.chamado?.situacao ==='Aberto'){
+            this.setState({ aberto:  true})
+        }
+        }catch(error){
+            this.setState({ redirectTo: "/error"})                                        
+        }
+
+        
+    }
+    async excluirChamado(){
+
+        try {
+            let res = await chamadosService.excluir(this.state.chamado?.id_chamado)      
+            console.log(res)      
+            this.setState({ redirectTo: "/cond-chamados-list"})                                        
+        } catch (error) {
+            console.log(error)
+            this.setState({ redirectTo: "/error"})                                        
+
+        }
     }
     render() {
 
@@ -55,9 +77,6 @@ class CondConsultarChamado extends React.Component {
             <div className="container">
 
                 <PageTop title={"Chamado"}>
-                    <button className="btn btn-light" onClick={() => this.props.history.goBack()}>
-                        Cancelar
-                    </button>
                 </PageTop>
 
                 <div className="row">
@@ -80,7 +99,7 @@ class CondConsultarChamado extends React.Component {
                             <p>{this.state.chamado?.situacao}</p>
                         </div>
                         
-                        <div className="post-info">
+                        {this.state.situacao && <div className="post-info">
                             <h4>Resposta</h4>
                             <p>{this.state.resposta.map(respostas => (
                
@@ -90,12 +109,40 @@ class CondConsultarChamado extends React.Component {
                 
                              ))}
                             </p>
-                        </div>
-                    
+                            
+                        </div>}
+                    <div>
+                                
+                    </div>
                        
                     </div>
-
+                                 
                 </div>
+                {this.state.aberto && <div>
+                    <button className="btn btn-primary" onClick={() => this.setState({ show: true })}>
+                        Excluir
+                    </button> 
+                    </div>}    
+                
+                    <>
+
+                    <Modal
+                        show={this.state.show}
+                        backdrop="static"
+                        keyboard={false}
+                    >
+                        
+                        <Modal.Body>
+                        Deseja excluir o chamado?
+                        </Modal.Body>
+                        <Modal.Footer>
+                        <Button variant="secondary" onClick={() => this.setState({ show: false })}>
+                            Fechar
+                        </Button>
+                        <Button variant="primary" onClick={() => this.excluirChamado()}>Excluir</Button>
+                        </Modal.Footer>
+                    </Modal>
+                    </>
             </div>
         )
     }

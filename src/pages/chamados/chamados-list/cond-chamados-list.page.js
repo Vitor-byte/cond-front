@@ -25,11 +25,8 @@ class CondChamadosListPage extends React.Component {
         let userData = authService.getLoggedUser();
         if(userData && userData[0].tipo === 'Condomino'){
             this.consultarChamados(userData[0].id_usuario)
-        }else{
-            
-            this.props.history.replace('/')
-
-            
+        }else{    
+            this.setState({ redirectTo: "/login"})                                          
         }
 
 
@@ -45,7 +42,7 @@ class CondChamadosListPage extends React.Component {
             this.setState({ chamados: res.data})
         } catch (error) {
             console.log(error);
-            alert("Não foi possível listar os chamados.")
+            this.setState({ redirectTo: "/error"})                                        
         }
     }
   

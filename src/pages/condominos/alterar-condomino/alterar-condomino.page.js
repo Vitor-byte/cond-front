@@ -1,14 +1,17 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
-//import authService from '../../services/auth.service';
+import authService from '../../../services/auth.service';
 import condominosService from '../../../services/condominos.service';
+import  { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 
 class AlterarCondomino extends React.Component {
-
+    
     constructor(props){
         super(props)
-
+    
         this.state = {
             id: null,
             nome : '',
@@ -19,6 +22,9 @@ class AlterarCondomino extends React.Component {
             inadimplente:'',
             bloco : '',
             unidade: '',
+            showErro:false,
+            show:false,
+            fechar:false,
             redirectTo: null
         }
 
@@ -26,13 +32,17 @@ class AlterarCondomino extends React.Component {
 
     // Função executada assim que o componente carrega
     componentDidMount(){
-      
+        
+        let userData = authService.getLoggedUser();
+        if(userData && userData[0].tipo === 'Sindico'){
             if(this.props?.match?.params?.id_usuario){
                 let condominoId = this.props.match.params.id_usuario
                 console.log(condominoId)
                 this.consultarCondomino(condominoId)
             }
-      
+        }else{                                     
+            this.setState({ redirectTo: "/login"})                                        
+        }
     }
 
     async consultarCondomino(condominoId){
@@ -41,10 +51,18 @@ class AlterarCondomino extends React.Component {
             let condomino = res.data[0]
             this.setState(condomino)
         } catch (error) {
-            console.log(error);
+            this.setState({ redirectTo: "/error"})                                        
         }
     }
-
+    async consultarCondomino(condominoId){
+        try {
+            let res = await condominosService.getOne(condominoId)
+            let condomino = res.data[0]
+            this.setState(condomino)
+        } catch (error) {
+            this.setState({ redirectTo: "/error"})                                        
+        }
+    }
     async enviarCondomino(){
         
         // Reunindo dados
@@ -58,7 +76,7 @@ class AlterarCondomino extends React.Component {
             unidade : this.state.unidade,
             bloco : this.state.bloco,
         }
-
+        console.log(data)
         // Realizando verificações
         if(!data.rg || data.rg === ''){
             this.rg.focus()        
@@ -86,13 +104,40 @@ class AlterarCondomino extends React.Component {
         }
 
         try {
-            await condominosService.edit(data, this.state.id_usuario)            
+            let res = await condominosService.edit(data, this.state.id_usuario)      
+            console.log(res)      
         } catch (error) {
             console.log(error)
-            
+            this.setState({ redirectTo: "/error"})                                        
+
+        }
+
+    }
+    async excluirCondomino(){
+        
+        // Reunindo dados
+        let data = {
+            nome : this.state.nome,
+            email : this.state.email,
+            senha : this.state.senha,
+            inadimplente: this.state.inadimplente,
+            situacao:this.state.situacao,
+            rg : this.state.rg,
+            unidade : this.state.unidade,
+            bloco : this.state.bloco,
+        }
+        console.log(data)
+        
+        try {
+            let res = await condominosService.excluir(this.state.id_usuario)      
+            console.log(res)      
+        } catch (error) {
+            console.log(error)
+            this.setState({ show: false})                                        
+            this.setState({ showErro: true})                                        
+
         }
     }
-
     render() {
 
         if(this.state.redirectTo){
@@ -106,7 +151,7 @@ class AlterarCondomino extends React.Component {
 
                 <PageTop title="Condômino" >
                 </PageTop>
-
+               
                 <form onSubmit={e => e.preventDefault()}>
                 <div className="form-group">
                         <label htmlFor="rg">Rg</label>
@@ -159,22 +204,27 @@ class AlterarCondomino extends React.Component {
                     ref={(input) => { this.inadimplente = input }}
                     onChange={e => this.setState({ inadimplente: e.target.value })}
                     >
+                        
                     <option value="Sim">Sim</option>
                     <option value="Não">Não</option>
                     </select>
                     </div>
-
-
                     <div className="form-group">
-                        <label htmlFor="situacao">Situação</label>
-                        <input
-                            type="text"
-                            className="form-control"
-                            id="situacao"
-                            value={this.state.situacao}
-                            ref={(input) => { this.situcao = input }}
-                            onChange={e => this.setState({ situacao: e.target.value })} />
+                    <label htmlFor="situacao">Situação</label>
+                    <select
+                    type="text"
+                    className="form-control"
+                    id="situacao"
+                    value={this.state.situacao}
+                    ref={(input) => { this.situacao = input }}
+                    onChange={e => this.setState({ situacao: e.target.value })}
+                    >
+                       
+                    <option value="Ativo">Ativo</option>
+                    <option value="Inativo">Inativo</option>
+                    </select>
                     </div>
+
                     <div className="form-group">
                         <label htmlFor="bloco">Bloco</label>
                         <input
@@ -196,12 +246,55 @@ class AlterarCondomino extends React.Component {
                             onChange={e => this.setState({ unidade: e.target.value })} />
                     </div>
                 </form>
-                <button className="btn btn-light" onClick={() => this.props.history.replace('/condominos-list')}>
-                        Cancelar
+                <button type="button" class="btn btn-primary"onClick={() => this.setState({ show: true })}>
+                    Excluir
                     </button>
-                    <button className="btn btn-primary" onClick={() => this.enviarCondomino()}>
-                        Salvar
+                    <button type="button" class="btn btn-primary" onClick={() => this.state.enviarCondomino()}>
+                    Salvar
                     </button>
+                    <>
+
+                        <Modal
+                            show={this.state.show}
+                            backdrop="static"
+                            keyboard={false}
+                        >
+                            
+                            <Modal.Body>
+                            Deseja excluir o condômino?
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <Button variant="secondary" onClick={() => this.setState({ show: false })}>
+                                Cancelar
+                            </Button>
+                            <Button variant="primary" onClick={() => this.excluirCondomino()}>Excluir</Button>
+                            </Modal.Footer>
+                        </Modal>
+                    </>
+                    <>
+                        
+
+                        <Modal
+                            show={this.state.showErro}
+                            backdrop="static"
+                            keyboard={false}
+                        >
+                            <Modal.Header closeButton>
+                            </Modal.Header>
+                            <Modal.Body>
+                            Não é possivel excluir esse condômino!
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <Button variant="secondary" onClick={() => this.setState({ showErro: false })}>
+                                Fechar
+                            </Button>
+                           
+                            </Modal.Footer>
+                        </Modal>
+                    </>
+                
+
+                  
             </div>
         )
     }

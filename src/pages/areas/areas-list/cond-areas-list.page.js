@@ -21,7 +21,7 @@ class CondAreasList extends React.Component {
         if(userData && userData[0].tipo === 'Condomino'){
             this.getAreas()  
         }else{                                     
-            this.props.history.replace('/erro')
+            this.setState({ redirectTo: "/login"})                                        
         }
     }
 
@@ -32,7 +32,7 @@ class CondAreasList extends React.Component {
             this.setState({ areas: res.data})
         } catch (error) {
             console.log(error);
-            alert("Não foi possível listar.")
+            this.setState({ redirectTo: "/erro"})                                        
         }
     }
 

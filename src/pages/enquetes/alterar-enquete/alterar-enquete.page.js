@@ -4,7 +4,8 @@ import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import enquetesService from '../../../services/enquetes.service';
 import { Table } from 'semantic-ui-react'
-
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 class AlterarEnquete extends React.Component {
 
     constructor(props){
@@ -14,6 +15,8 @@ class AlterarEnquete extends React.Component {
             enquete: '',
             resultado:[],
             situacao:false,
+            showFinalizar:false,
+            showCancelar:false,
             redirectTo: null
         }
 
@@ -27,7 +30,7 @@ class AlterarEnquete extends React.Component {
                 this.consultarEnquete(enqueteId)
             }
         }else{
-            this.props.history.replace('/erro')
+            this.setState({ redirectTo: "/login"})                                        
         }
     
     }
@@ -38,8 +41,9 @@ class AlterarEnquete extends React.Component {
             console.log(res2);
             this.setState({enquete: res.data[0]})
         } catch (error) {
-            console.log(error);
+            this.setState({ redirectTo: "/erro"})                                        
         }
+        try{
         let res3 = await enquetesService.consultarResultado(enqueteId)
         this.setState({resultado: res3.data})
 
@@ -47,6 +51,9 @@ class AlterarEnquete extends React.Component {
             this.setState({situacao: true})
         
         }
+    }catch(erro){
+        this.setState({ redirectTo: "/erro"})                                        
+    }
     }
     async finalizarEnquete(enqueteId){
         try {
@@ -54,7 +61,7 @@ class AlterarEnquete extends React.Component {
             let enquete = res.data[0]
             this.setState(enquete)
         } catch (error) {
-            console.log(error);
+            this.setState({ redirectTo: "/erro"})                                        
         }
         window.location.reload();
 
@@ -129,13 +136,51 @@ class AlterarEnquete extends React.Component {
                 
                 
                 {this.state.situacao && <div className="post-info">
-                    <button className="btn btn-light" onClick={() => this.cancelarEnquete(this.state.enquete.id_enquete)}>
+                    <button className="btn btn-light"  onClick={() => this.setState({ showCancelar: true })}>
                         Cancelar
                     </button>
-                    <button className="btn btn-primary" onClick={() => this.finalizarEnquete(this.state.enquete.id_enquete)}>
+                    <button className="btn btn-primary" onClick={() => this.setState({ showFinalizar: true })}>
                         Finalizar
                     </button>
                 </div>}
+                <>
+
+                    <Modal
+                        show={this.state.showFinalizar}
+                        backdrop="static"
+                        keyboard={false}
+                    >
+                        
+                        <Modal.Body>
+                        Deseja finalizar a enquete?
+                        </Modal.Body>
+                        <Modal.Footer>
+                        <Button variant="secondary" onClick={() => this.setState({ show: false })}>
+                            fechar
+                        </Button>
+                        <Button variant="primary" onClick={() => this.finalizarEnquete(this.state.enquete.id_enquete)}>Finalizar</Button>
+                        </Modal.Footer>
+                    </Modal>
+                </>
+                <>
+
+                    <Modal
+                        show={this.state.showCancelar}
+                        backdrop="static"
+                        keyboard={false}
+                    >
+                        
+                        <Modal.Body>
+                        Deseja cancelar a enquete?
+                        </Modal.Body>
+                        <Modal.Footer>
+                        <Button variant="secondary" onClick={() => this.setState({ showCancelar: false })}>
+                            fechar
+                        </Button>
+                        <Button variant="primary" onClick={() => this.cancelarEnquete(this.state.enquete.id_enquete)}>Cancelar</Button>
+                        </Modal.Footer>
+                    </Modal>
+                </>
             </div>
         )
     }

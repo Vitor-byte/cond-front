@@ -26,7 +26,7 @@ class incluirChamado extends React.Component {
             this.setState({ id_usuario: userData[0].id_usuario})
             this.render()
         }else{                                     
-            this.props.history.replace('/erro')
+            this.setState({ redirectTo: "/login"})                                        
         }
     }
    
@@ -58,7 +58,7 @@ class incluirChamado extends React.Component {
 
         } catch (error) {
             console.log(error);
-            alert("Não foi possível cancelar o chamado."+error)
+            this.setState({ redirectTo: "/error"})                                        
         }
     }
     
@@ -76,10 +76,6 @@ class incluirChamado extends React.Component {
             <div className="container">
 
                 <PageTop title={'Incluir chamado'}>
-                    <button className="btn btn-light"  onClick={() => this.props.history.goBack()}>
-                        Voltar
-                    </button>
-                  
                 </PageTop>
 
                 <form onSubmit={e => e.preventDefault()}>

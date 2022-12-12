@@ -22,7 +22,7 @@ class CondEnquetesListPage extends React.Component {
         if(userData && userData[0].tipo === 'Condomino'){
             this.consultarEnquetes()  
         }else{                                     
-            this.props.history.replace('/erro')
+            this.setState({ redirectTo: "/login"})                                        
         }
     }
 
@@ -33,7 +33,7 @@ class CondEnquetesListPage extends React.Component {
             this.setState({ enquetes: res.data})
         } catch (error) {
             console.log(error);
-            alert("Não foi possível listar os condômino.")
+            this.setState({ redirectTo: "erro"})                                        
         }
     }
 

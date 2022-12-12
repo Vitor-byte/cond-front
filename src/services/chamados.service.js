@@ -22,7 +22,6 @@ const avisosService = {
         const enpoint = apiUrl + "/chamados/finalizados"
         return axios.get(enpoint)
     },
-    // Função para recuperar dados de um post específico
     async consultarChamado(chamadoId){
         const enpoint = apiUrl + "/chamado/" + chamadoId
         return axios.get(enpoint)
@@ -35,7 +34,6 @@ const avisosService = {
         const enpoint = apiUrl + "/chamado/resposta/" + chamadoId
         return axios.get(enpoint)
     },
-    // Função para criar um novo post
     async incluirChamado(data){
         const enpoint = apiUrl + "/chamado"
         return axios.post(enpoint, data)
@@ -44,7 +42,6 @@ const avisosService = {
         const enpoint = apiUrl + "/chamado/" + chamadoId
         return axios.patch(enpoint, data)
     },
-    // Função para editar um post específico
     async edit(data, chamadoId){
         const enpoint = apiUrl + "/chamado/" + chamadoId
         return axios.patch(enpoint, data)
@@ -57,9 +54,8 @@ const avisosService = {
         const enpoint = apiUrl + "/chamado/finalizar/" + chamadoId
         return axios.patch(enpoint, data)
     },
-    // Função para exluir um post específico
-    async delete(avisoId){
-        const enpoint = apiUrl + "/aviso/" + avisoId
+    async excluir(chamadoId){
+        const enpoint = apiUrl + "/chamado/" + chamadoId
         return axios.delete(enpoint)
     },
 

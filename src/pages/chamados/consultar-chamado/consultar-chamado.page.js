@@ -25,21 +25,20 @@ class ConsultarChamado extends React.Component {
                 this.consultarChamado(chamadoId)
             }
         }else{
-            this.props.history.replace('/erro')
+            this.props.history.replace('/login')
         }
-    
-            const chamadoId = this.props.match.params.id_chamado
-            console.log(chamadoId);
-            this.consultarChamado(chamadoId)
     }
 
     async consultarChamado(chamadoId) {
-            let res = await chamadosService.consultarChamado(chamadoId)
-            let res2 = await chamadosService.consultarChamadoResposta(chamadoId)
-            console.log(res2);
-            this.setState({ chamado: res.data[0] })
-            this.setState({ resposta: res2.data })
-         
+        try{
+        let res = await chamadosService.consultarChamado(chamadoId)
+        let res2 = await chamadosService.consultarChamadoResposta(chamadoId)
+        console.log(res2);
+        this.setState({ chamado: res.data[0] })
+        this.setState({ resposta: res2.data })
+        }catch(error){
+            this.setState({ redirectTo: "/error"})                                        
+        }
 
         
     }
@@ -55,9 +54,6 @@ class ConsultarChamado extends React.Component {
             <div className="container">
 
                 <PageTop title={"Chamado"}>
-                    <button className="btn btn-light" onClick={() => this.props.history.goBack()}>
-                        Cancelar
-                    </button>
                 </PageTop>
 
                 <div className="row">

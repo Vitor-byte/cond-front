@@ -28,7 +28,7 @@ class IncluirAviso extends React.Component {
                 this.getAviso(avisoId)
             }  
         }else{                                     
-            this.props.history.replace('/erro')
+            this.setState({ redirectTo: "/login"})                                        
         }
     }
 
@@ -39,7 +39,7 @@ class IncluirAviso extends React.Component {
             this.setState(aviso)
         } catch (error) {
             console.log(error);
-            alert("Não foi possível carregar aviso.")
+            this.setState({ redirectTo: "/erro"})                                        
         }
     }
 
@@ -65,7 +65,8 @@ class IncluirAviso extends React.Component {
             this.props.history.push('/alterar-aviso/'+res.data[0].id_aviso)
         } catch (error) {
             console.log(error)
-            
+            this.setState({ redirectTo: "/erro"})                                        
+
         }
     }
 

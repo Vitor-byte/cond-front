@@ -3,7 +3,8 @@ import { Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import areasService from '../../../services/areas.service';
-
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 class ReservarArea extends React.Component {
 
     constructor(props) {
@@ -28,12 +29,12 @@ class ReservarArea extends React.Component {
                 this.getArea(areaId)
             }  
         }else{                                     
-            this.props.history.replace('/erro')
+            this.setState({ redirectTo: "/login"})                                        
         }
     }
 
     async getArea(areasId) {
-        
+        try{
             let res = await areasService.getOne(areasId)
             console.log(res);
             this.setState({ areas: res.data[0] })
@@ -41,10 +42,20 @@ class ReservarArea extends React.Component {
             if(res.data[0].situacao === "Fechada"){
                 this.props.history.replace('/erro')
             }    
-       
+        }catch (error){
+            this.setState({ redirectTo: "/erro"})                                        
+
+        }
         
     }
-
+    async validar() {
+        if(this.state.opcao === ''){
+            this.data.focus()  
+            return      
+        }
+    this.setState({ show: true })  
+        
+    }
     async consultarHorarios() {
        let data =  this.state.data
        if(!data || data === ''){
@@ -57,6 +68,7 @@ class ReservarArea extends React.Component {
             console.log(this.state.horarios);
         } catch (error) {
             console.log(error.response.data);
+            this.setState({ redirectTo: "/erro"})                                        
         }
     }
     async reservarArea() {
@@ -76,7 +88,7 @@ class ReservarArea extends React.Component {
             this.props.history.push('/consultar-reserva/'+res.data[0].id_reserva)
             console.log(res);
         } catch (error) {
-            console.log(error.response.data);
+            this.setState({ redirectTo: "/erro"})                                        
         }
 
     }
@@ -92,9 +104,6 @@ class ReservarArea extends React.Component {
             <div className="container">
 
                 <PageTop title={"Área"}>
-                    <button className="btn btn-light" onClick={() => this.props.history.goBack()}>
-                        Voltar
-                    </button>
                 </PageTop>
 
                 <div className="row">
@@ -133,13 +142,13 @@ class ReservarArea extends React.Component {
                         <div className="btn-group" role="group" aria-label="Basic example">
                         <button
                                 type="button"
-                                className="btn btn-sm btn-outline-primary"
-                                onClick={() =>  this.reservarArea(this.state.opcao)}>
+                                className="btn btn-primary"
+                                onClick={() =>  this.validar(this.state.opcao)}>
                                 Reservar
                      </button>
                             <button
                                 type="button"
-                                className="btn btn-sm btn-outline-primary"
+                                className="btn btn-primary"
                                 onClick={() =>  this.consultarHorarios(this.state.data)}>
                                 Consultar Horarios
                             </button>
@@ -164,6 +173,25 @@ class ReservarArea extends React.Component {
                     ))}
                      
                     </form>
+                    <>
+
+                        <Modal
+                            show={this.state.show}
+                            backdrop="static"
+                            keyboard={false}
+                        >
+                            
+                            <Modal.Body>
+                            Deseja reservar a área?
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <Button variant="secondary" onClick={() => this.setState({ show: false })}>
+                                Cancelar
+                            </Button>
+                            <Button variant="primary" onClick={() =>  this.reservarArea(this.state.opcao)}>Reservar</Button>
+                            </Modal.Footer>
+                        </Modal>
+                    </>
                 </div>
 
                 </div>

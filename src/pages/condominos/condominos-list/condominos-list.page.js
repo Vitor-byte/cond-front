@@ -22,11 +22,10 @@ class CondominosListPage extends React.Component {
       
         let userData = authService.getLoggedUser();
         console.log(userData)
-        if(!userData){
-            this.setState({redirectTo : "/login"})
-        
-        }else{
+        if(userData && userData[0].tipo === 'Sindico'){
             this.getCondominos()
+        }else{
+            this.setState({ redirectTo: "/login"})                                        
         }
     
     }
@@ -37,7 +36,7 @@ class CondominosListPage extends React.Component {
             this.setState({ condominos: res.data})
         } catch (error) {
             console.log(error);
-            alert("Não foi possível listar os condômino.")
+            this.setState({ redirectTo: "/error"})                                        
         }
     }
     render() {
@@ -52,15 +51,12 @@ class CondominosListPage extends React.Component {
             <div className="container">
 
                 <PageTop title={"Condôminos"}>
-                    <button className="button" onClick={() => this.props.history.push('/incluir-condomino')}>
-                        Novo Condômino
+                    <button className="btn btn-primary" onClick={() => this.props.history.push('/incluir-condomino')}>
+                        Novo condômino
                     </button>
                 </PageTop>
                 
-
-            
-                {this.state.condominos.map(condominos => (
-                    <><Table fixed>
+                <Table fixed>
                         <Table.Header>
                             <Table.Row>
                                 <Table.HeaderCell>ID</Table.HeaderCell>
@@ -69,7 +65,13 @@ class CondominosListPage extends React.Component {
                                 <Table.HeaderCell>Inadimplenete</Table.HeaderCell>
 
                             </Table.Row>
-                        </Table.Header>
+                </Table.Header>
+                </Table>
+              
+            
+                {this.state.condominos.map(condominos => (
+                    <>
+                    <Table fixed>
 
                         <Table.Body>
                             <Table.Row>

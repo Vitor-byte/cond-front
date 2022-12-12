@@ -3,7 +3,8 @@ import { Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import enquetesService from '../../../services/enquetes.service';
-
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 class VotarEnquete extends React.Component {
 
     constructor(props){
@@ -17,6 +18,7 @@ class VotarEnquete extends React.Component {
             vota:true,
             situacao:false,
             redirectTo: null,
+            show:false,
             id_usuario:null,
         }
 
@@ -38,6 +40,9 @@ class VotarEnquete extends React.Component {
         }
     }
 async verificaVoto(enqueteId, id_usuario){
+        console.log(enqueteId)
+        console.log(id_usuario)
+
         let data = {
             id_usuario: id_usuario,
             id_enquete: enqueteId,
@@ -46,17 +51,19 @@ async verificaVoto(enqueteId, id_usuario){
             let res = await enquetesService.verificaVoto(data)
             console.log(res.data[0])
 
-            if(res.data[0].id_enquete = enqueteId){
+            if(res.data[0].id_enquete == enqueteId){
                 this.setState({vota: false})
+            }else{
+                return
             }
             
 
         } catch (error) {
             console.log(error)
+            
         }
             return
     }
-    // Função que recupera os dados do post caso seja uma edição
     async consultarEnquete(enqueteId){
 
         try {
@@ -146,10 +153,32 @@ async verificaVoto(enqueteId, id_usuario){
     
                 
                 {(this.state.situacao && this.state.vota) && <div className="post-info">
-                    <button className="btn btn-light" onClick={() => this.votarEnquete(this.state.enquete.id_enquete)}>
+                    <button className="btn btn-primary" onClick={() => this.votarEnquete(this.state.enquete.id_enquete)}>
                         Votar
                     </button>
                 </div>}
+
+                <>
+                        
+
+                        <Modal
+                            show={this.state.show}
+                            backdrop="static"
+                            keyboard={false}
+                        >
+                            <Modal.Header closeButton>
+                            </Modal.Header>
+                            <Modal.Body>
+                            Deseja votar nessa opção?
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <Button variant="secondary" onClick={() => this.setState({ showErro: false })}>
+                                Fechar
+                            </Button>
+                            <Button variant="primary"  onClick={() => this.votarEnquete(this.state.enquete.id_enquete)}>Votar</Button>
+                            </Modal.Footer>
+                        </Modal>
+                    </>
             </div>
         )
     }

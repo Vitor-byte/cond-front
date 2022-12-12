@@ -29,7 +29,7 @@ class AlterarArea extends React.Component {
                 this.getArea(areaId)
             }  
         }else{                                     
-            this.props.history.replace('/erro')
+            this.setState({ redirectTo: "/login"})                                        
         }
     }
 
@@ -40,6 +40,7 @@ class AlterarArea extends React.Component {
             this.setState(area)
         } catch (error) {
             console.log(error);
+            this.setState({ redirectTo: "/erro"})                                        
         }
     }
 
@@ -76,7 +77,8 @@ class AlterarArea extends React.Component {
             await areasService.alterarArea(data, this.state.id_area_comum)
         } catch (error) {
             console.log(error)
-            
+            this.setState({ redirectTo: "/erro"})                                        
+
         }
         window.location.reload();
 
@@ -120,7 +122,7 @@ class AlterarArea extends React.Component {
                     <div className="form-group">
                         <label htmlFor="title">Preço</label>
                         <input
-                            type="text"
+                            type="number"
                             className="form-control"
                             id="title"
                             value={this.state.preco}
@@ -143,6 +145,7 @@ class AlterarArea extends React.Component {
                     <button className="btn btn-primary" onClick={() => this.enviarArea()}>
                         Salvar
                     </button>
+                    
             </div>
         )
     }

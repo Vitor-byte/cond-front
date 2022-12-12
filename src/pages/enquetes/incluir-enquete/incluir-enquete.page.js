@@ -31,7 +31,9 @@ class IncluirEnquete extends React.Component {
         if( userData && userData[0].tipo === 'Sindico'){
             this.render()
         }else{
-            this.props.history.replace('/erro')
+            authService.clearLoggedUser();
+
+            this.props.history.replace('/login')
         }
     
 
@@ -87,7 +89,7 @@ class IncluirEnquete extends React.Component {
           
 
         } catch (error) {
-            console.log(error)
+            this.props.history.replace('/erro')
             
         }
     }
@@ -178,11 +180,8 @@ class IncluirEnquete extends React.Component {
                             ref={(input) => { this.opcao5 = input }}
                             onChange={e => this.setState({ opcao5: e.target.value })} />
                     </div>
-                    <button className="btn btn-light" onClick={() => this.props.history.replace('/enquetes-list')}>
-                        Cancelar
-                    </button>
                     <button className="btn btn-primary" onClick={() => this.incluirEnquete()}>
-                        Salvar
+                        Incluir
                     </button>
                 </form>
             </div>

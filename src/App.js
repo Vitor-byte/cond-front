@@ -83,7 +83,7 @@ class App extends React.Component {
       <BrowserRouter>
            <div>
             {(this.state.userData) ? (
-                 <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                 <nav className="navbar navbar-expand-lg navbar-light bg-light"  >
                  <Link to="/" className="navbar-brand">Condominio</Link>
                  <button className="navbar-toggler"
                    type="button"

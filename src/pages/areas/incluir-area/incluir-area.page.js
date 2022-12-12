@@ -25,7 +25,7 @@ class IncluirArea extends React.Component {
         if( userData && userData[0].tipo === 'Sindico'){
             this.render()
         }else{
-            this.props.history.replace('/erro')
+            this.setState({ redirectTo: "/login"})                                        
         }
     
 
@@ -54,16 +54,14 @@ class IncluirArea extends React.Component {
             this.preco.focus() 
             return;
          }
-         if(!data.situacao || data.situacao === ''){
-            this.situacao.focus() 
-            return;
-         }
+        
       
         try{
-        await areasService.create(data, this.state.id_area_comum)
-        this.props.history.push('/alterar-list')
+        let res = await areasService.create(data, this.state.id_area_comum)
+        this.props.history.push('/alterar-area/'+res.data[0].id_area_comum)
         } catch (error) {
             console.log(error)
+            this.setState({ redirectTo: "/erro"})                                         
             
         }
     }
@@ -106,11 +104,10 @@ class IncluirArea extends React.Component {
                     <div className="form-group">
                         <label htmlFor="title">Preço</label>
                         <input
-                            type="text"
+                            type="number"
                             className="form-control"
                             id="title"
                             value={this.state.preco}
-                            ref={(input) => { this.preco = input }}
                             onChange={e => this.setState({ preco: e.target.value })} />
                         
                     </div>
@@ -122,6 +119,7 @@ class IncluirArea extends React.Component {
                     className="form-control"
                     id="situacao"
                     value={this.state.situacao}
+                    ref={(select) => { this.situacao = select }}
                     onChange={e => this.setState({ situacao: e.target.value })}
                     >
                     <option value="Aberta">Aberta</option>

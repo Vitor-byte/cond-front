@@ -3,6 +3,8 @@ import { Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import authService from '../../../services/auth.service';
 import chamadosService from '../../../services/chamados.service';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 class AtenderChamado extends React.Component {
 
     constructor(props) {
@@ -16,6 +18,9 @@ class AtenderChamado extends React.Component {
             aberto: false,
             andamento:false,
             chamado: '',
+            showIniciar:false,
+            showFinalizar:false,
+            showCancelar:false,
             redirectTo: null
         }
     }
@@ -29,13 +34,13 @@ class AtenderChamado extends React.Component {
                 this.consultarChamado(chamadoId)
             }  
         }else{                                     
-            this.props.history.replace('/erro')
+            this.setState({ redirectTo: "/login"})                                        
         }
     }
-
+   
     // Função que carrega os dados do post e salva no state
     async consultarChamado(chamadoId) {
-        
+        try{
             let res = await chamadosService.consultarChamado(chamadoId)
             this.setState({ chamado: res.data[0] })
             console.log(res)
@@ -49,13 +54,58 @@ class AtenderChamado extends React.Component {
                 this.setState({ aberto: true })
                 
             }
-            
+        }catch(error){
+            this.setState({ redirectTo: "/error"})                                        
+        } 
         
     }
+    async validaIniciar() {
+        if(this.state.novaResposta === ''){
+            this.novaResposta.focus()        
+            return
+        }
+        this.setState({ showIniciar: true })
 
+    }
+    async validaCancelar() {
+        if(this.state.novaResposta === ''){
+            this.novaResposta.focus()        
+            return
+        }
+        this.setState({ showCancelar: true })
+
+    }
+    async validaFinalizar() {
+        if(this.state.novaResposta === ''){
+            this.novaResposta.focus()        
+            return
+        }
+        this.setState({ showFinalizar: true })
+
+    }
     async atenderChamado(chamadoId) {
+        
         let data = {
             situacao : "Em andamento",
+            tipo:this.state.tipo,
+            resposta: this.state.novaResposta
+        }
+
+        if(!data.resposta || data.resposta === ''){
+            this.novaResposta.focus()        
+            return;
+        }
+        try{
+        await chamadosService.atenderChamado(data, chamadoId)
+        this.props.history.push('/chamados-list')
+        }catch(error){
+            this.setState({ redirectTo: "/error"})                                        
+        }
+    }
+
+    async cancelarChamado(chamadoId) {
+        let data = {
+            situacao : "Cancelado",
             tipo:this.state.tipo,
             resposta: this.state.novaResposta
         }
@@ -63,9 +113,13 @@ class AtenderChamado extends React.Component {
             this.novaResposta.focus()        
             return;
         }
-
+        try{
         await chamadosService.atenderChamado(data, chamadoId)
         this.props.history.push('/chamados-list')
+        }catch(error){
+            this.setState({ redirectTo: "/error"})                                        
+        }
+
     }
     async finalizarChamado(chamadoId) {
         let data = {
@@ -76,9 +130,12 @@ class AtenderChamado extends React.Component {
             this.novaResposta.focus()        
             return;
         }
-
+        try{
         await chamadosService.atenderChamado(data, chamadoId)
         this.props.history.push('/chamados-list')
+        }catch(error){
+            this.setState({ redirectTo: "/error"})                                        
+        }
     }
     render() {
 
@@ -91,10 +148,7 @@ class AtenderChamado extends React.Component {
         return (
             <div className="container">
 
-                <PageTop title={"Chamado"} >
-                    <button className="btn btn-light" onClick={() => this.props.history.goBack()}>
-                        Cancelar
-                    </button>
+                <PageTop title={"Chamado"} >  
                 </PageTop>
 
                 <div className="row">
@@ -154,26 +208,90 @@ class AtenderChamado extends React.Component {
                         {this.state.aberto && <div className="btn-group" role="group" aria-label="Basic example">
                             <button
                                 type="button"
-                                className="btn btn-sm btn-outline-danger"
-                                onClick={() => this.atenderChamado(this.state.chamado.id_chamado)}>
-                                Iniciar
-                            </button>
-                        
-                        </div>}
-                        {this.state.andamento && <div className="btn-group" role="group" aria-label="Basic example">
-                            <button
-                                type="button"
-                                className="btn btn-sm btn-outline-danger"
-                                onClick={() => this.atenderChamado(this.state.chamado.id_chamado)}>
+                                className="btn btn-primary"
+                                onClick={() => this.validaCancelar()}>
                                 Cancelar
                             </button>
                             <button
                                 type="button"
-                                className="btn btn-sm btn-outline-danger"
-                                onClick={() => this.finalizarChamado(this.state.chamado.id_chamado)}>
+                                className="btn btn-primary"
+                                onClick={() => this.validaIniciar()}
+                                >
+                                Iniciar
+                            </button>
+                        
+                        </div>}
+                        <>
+
+                        <Modal
+                            show={this.state.showIniciar}
+                            backdrop="static"
+                            keyboard={false}
+                        >
+                            
+                            <Modal.Body>
+                            Deseja iniciar o atendimento?
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <Button variant="secondary" onClick={() => this.setState({ showIniciar: false })}>
+                                Fechar
+                            </Button>
+                            <Button variant="primary"  onClick={() => this.atenderChamado(this.state.chamado.id_chamado)}>Iniciar</Button>
+                            </Modal.Footer>
+                        </Modal>
+                        </>
+
+                        {this.state.andamento && <div className="btn-group" role="group" aria-label="Basic example">
+                            <button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={() => this.validaCancelar()}>
+                                Cancelar
+                            </button>
+                            <button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={() => this.validaFinalizar()}>
                                 Finalizar
                             </button>
                         </div>}
+                        <>
+                        <Modal
+                            show={this.state.showFinalizar}
+                            backdrop="static"
+                            keyboard={false}
+                        >
+                            
+                            <Modal.Body>
+                            Deseja finalizar o atendimento?
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <Button variant="secondary" onClick={() => this.setState({ showFinalizar: false })}>
+                                Fechar
+                            </Button>
+                            <Button variant="primary"  onClick={() => this.finalizarChamado(this.state.chamado.id_chamado)}>Finalizar</Button>
+                            </Modal.Footer>
+                        </Modal>
+                        </>
+                        <>
+                        <Modal
+                            show={this.state.showCancelar}
+                            backdrop="static"
+                            keyboard={false}
+                        >
+                            
+                            <Modal.Body>
+                            Deseja cancelar o atendimento?
+                            </Modal.Body>
+                            <Modal.Footer>
+                            <Button variant="secondary" onClick={() => this.setState({ showCancelar: false })}>
+                                Fechar
+                            </Button>
+                            <Button variant="primary"  onClick={() => this.cancelarChamado(this.state.chamado.id_chamado)}>Cancelar</Button>
+                            </Modal.Footer>
+                        </Modal>
+                        </>
+
                     </div>
 
                 </div>

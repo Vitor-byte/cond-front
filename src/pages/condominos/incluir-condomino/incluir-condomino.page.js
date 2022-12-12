@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import PageTop from '../../../components/page-top/page-top.component';
 import condominosService from '../../../services/condominos.service';
+import authService from '../../../services/auth.service';
 
 
 class IncluirCondomino extends React.Component {
@@ -25,7 +26,15 @@ class IncluirCondomino extends React.Component {
 
     }
 
-    
+    componentDidMount(){
+        let userData = authService.getLoggedUser();
+        if(userData && userData[0].tipo === 'Sindico'){
+            this.setState({ id_usuario: userData[0].id_usuario})
+            this.render()
+        }else{                                     
+            this.setState({ redirectTo: "/login"})                                        
+        }
+    }
 
     // Função responsável por salvar o post
     async incluirCondomino(){
@@ -42,6 +51,7 @@ class IncluirCondomino extends React.Component {
             bloco : this.state.bloco,
         }
 
+        console.log(data)
         if(!data.rg || data.rg === ''){
             this.rg.focus()        
             return
@@ -66,11 +76,15 @@ class IncluirCondomino extends React.Component {
             this.unidade.focus();        
             return
         }
+        try{
+
         
         let res = await condominosService.create(data)
         this.setState({ condomino: res.data[0]})
         this.props.history.push('/alterar-condomino/'+this.state.condomino.id_usuario)
-      
+        }catch(error){
+            this.setState({ redirectTo: "/error"})                                        
+        }
     }
 
     render() {
@@ -137,10 +151,11 @@ class IncluirCondomino extends React.Component {
                     <select
                     type="text"
                     className="form-control"
-                    id="inadimplente"
+                  
                     value={this.state.inadimplente}
                     onChange={e => this.setState({ inadimplente: e.target.value })}
                     >
+                    <option value="Selecione" selected>Selecione</option>
                     <option value="Sim">Sim</option>
                     <option value="Não">Não</option>
                     </select>
@@ -148,7 +163,7 @@ class IncluirCondomino extends React.Component {
 
 
                     <div className="form-group">
-                    <label htmlFor="inadimplente">Situação
+                    <label htmlFor="situacao">Situação
                     </label>
                     <select
                     type="text"
@@ -157,6 +172,7 @@ class IncluirCondomino extends React.Component {
                     value={this.state.situacao}
                     onChange={e => this.setState({ situacao: e.target.value })}
                     >
+                        <option value="Selecione" selected>Selecione</option>
                     <option value="Ativo">Ativo</option>
                     <option value="Inativo">Inativo</option>
                     </select>
@@ -184,11 +200,9 @@ class IncluirCondomino extends React.Component {
                         {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                     </div>
                 </form>
-                <button className="btn btn-light" onClick={() => this.props.history.replace('/condominos-list')}>
-                        Cancelar
-                    </button>
+               
                     <button className="btn btn-primary" onClick={() => this.incluirCondomino()}>
-                        Salvar
+                        Incluir
                     </button>
             </div>
         )
